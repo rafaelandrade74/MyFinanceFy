@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MyFinanceFy</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/lib/admlte/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/lib/SweetAlert2/sweetalert2.min.css" />
+    <link rel="stylesheet" href="~/lib/mvcgrid/css/mvc-grid/mvc-grid.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body class="hold-transition layout-top-nav">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand-md navbar-dark ">
+            <div class="container">
+                <a href="/" class="navbar-brand">
+                    <span class="brand-text font-weight-light">MyFinanceFy</span>
+                </a>
+
+                <button class="navbar-toggler order-1" type="button" data-toggle="collapse"
+                    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+                    <!-- Left navbar links -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Home" asp-area="" class="nav-link">Home</a>
+                        </li>
+                        <partial name="_MenuPrincipal">
+
+                    </ul>
+                </div>
+
+                <!-- Right navbar links -->
+                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+                    <partial name="_loginPartial" />
+                </ul>
+            </div>
+        </nav>
+        <!-- /.navbar -->
+        @* <partial name="_ManageNav" />*@
+        <div class="content-wrapper">
+
+
+            <!-- /.content-header -->
+            @RenderBody()
+
+
+        </div>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="float-right d-none d-sm-inline">
+            </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2023-@DateTime.Now.Year <a href="/">MyFinanceFy</a>.</strong> All rights
+            reserved.
+        </footer>
+
+    </div>
+
+    <script src="~/lib/admlte/plugins/jquery/jquery.min.js"></script>
+    <script src="~/lib/admlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/admlte/js/adminlte.min.js"></script>
+    <script src="~/lib/SweetAlert2/sweetalert2.all.min.js"></script>
+    <script src="~/lib/mvcgrid/js/mvc-grid/mvc-grid.js"></script>
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+    @if (TempData["MSG_S"] != null)
+    {
+        <script>
+
+            Swal.fire({
+                title: 'Sucesso!',
+                html: '@TempData["MSG_S"]',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            })
+        </script>
+    }
+    @if (TempData["MSG_E"] != null)
+    {
+        <script>
+
+            Swal.fire({
+                title: 'Erro!',
+                html: '@TempData["MSG_E"]',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        </script>
+    }
+    @if (TempData["MSG_A"] != null)
+    {
+        <script>
+
+            Swal.fire({
+                title: 'Aviso!',
+                html: '@TempData["MSG_A"]',
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            })
+        </script>
+    }
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

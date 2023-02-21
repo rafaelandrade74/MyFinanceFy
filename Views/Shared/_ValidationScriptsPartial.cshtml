@@ -1,0 +1,77 @@
+﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>$.validator.methods.number = function (value, element) {
+    return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+}</script>
+<script src="~/lib/qrcode/qrcode.min.js"></script>
+<script src="~/lib/jquery-mask/jquery.mask.min.js"></script>
+@if (TempData["UrlRemover"] != null)
+{
+    <script>
+
+        function removerItemAjax(id) {
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: "Não será possivel reverter está ação!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, Deletar!',
+                cancelButtonText: 'Não, cancelar!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const Token = $('input[name="__RequestVerificationToken"]').val();
+                    const Formulario = new FormData();
+                    Formulario.append('__RequestVerificationToken', Token);
+
+                    $.ajax({
+                        type: "DELETE",
+                        url: `@TempData["UrlRemover"]/${id}`,
+                        data: Formulario,
+                        contentType: false,
+                        processData: false,
+                        error: function (data) {
+                            Swal.fire({
+                                title: 'Erro',
+                                html: data.responseJSON,
+                                icon: 'error',
+                                confirmButtonText: 'Ok'
+                            });
+                        },
+                        success: function (data) {
+                            Swal.fire({
+                                title: 'Sucesso',
+                                html: data,
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
+                            }).then(() => {
+                                document.location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}
+
+<script>
+    $("#ParteUrl").keyup(function () {
+        let titulo = $(this).val();
+        titulo = removerAcentos(titulo);
+        $("#ParteUrl").val(titulo);
+    })
+
+    function removerAcentos(s) {
+        return s.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/ +/g, "-")
+            .replace(/-{2,}/g, "-")
+            .replace('#', '-')
+            .replace('@@', '-')
+            .replace('!', '-')
+            .replace('=', '-');
+    }
+</script>

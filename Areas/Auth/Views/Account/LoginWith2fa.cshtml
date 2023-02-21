@@ -1,0 +1,60 @@
+﻿@model AuthenticatorModel
+@{
+    ViewData["Title"] = "Two-factor authentication";
+    Layout = "/Areas/Auth/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.Pagina = "login-page";
+}
+
+<div class="login-box">
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+            <a href="/" class="h1">@Constantes.MyFinancefy</a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Seu usuario é protegido por um codigo. Entre com o codigo fornecido por seu aplicativo autenticador.</p>
+            <form method="post" asp-route-returnUrl="@TempData["returnUrl"]">
+                <input name="RememberMe" type="hidden" value="@TempData["rememberMe"]" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <span asp-validation-for="TwoFactorCode" class="text-danger"></span>
+                <div class="input-group mb-3">
+                    <input asp-for="TwoFactorCode" class="form-control" placeholder="Codigo" autocomplete="off" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-id-card"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input asp-for="RememberMachine" type="checkbox" id="remember">
+                            <label for="remember">
+                                Lembrar
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+            </form>
+            <p>
+                Está sem o autenticador no seu celular?
+                <a id="recovery-code-login" asp-action="LoginWithRecoveryCode" asp-route-returnUrl="@TempData["returnUrl"]">Use seu codigo mestre de recuperação.</a>.
+            </p>
+            <p class="mt-3 mb-1">
+                <a asp-action="Login">Login</a>
+            </p>
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+<!-- /.login-box -->
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

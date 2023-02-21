@@ -1,0 +1,10 @@
+﻿@model string
+
+@if (!String.IsNullOrEmpty(Model))
+{
+    <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" aria-orientation="vertical">
+        <a class="nav-link @(Model == "Profile" ? "active": "")" id="vert-tabs-profile-tab" asp-action="Profile" aria-selected="false">Perfil</a>
+        <a class="nav-link @(Model == "Change Password" ? "active": "")" id="vert-tabs-messages-tab" asp-action="ChangePassword" aria-selected="false">Trocar senha</a>
+        <a class="nav-link @(Model.ToLower().Contains("authenticator") ? "active": "")" id="vert-tabs-settings-tab" asp-action="TwoFactorAuthentication" aria-selected="false">Autenticador</a>
+    </div>
+}

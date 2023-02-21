@@ -1,0 +1,113 @@
+@model IEnumerable<PainelDados>
+@{
+    ViewData["Title"] = "Paineis";
+}
+
+<section class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- Content Header (Page header) -->
+@Html.AntiForgeryToken()
+<section class="content">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+
+                <div class="card card-solid">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                        <div class="card-tools">
+                            <div class="row">
+                                <ul class="nav nav-pills ml-auto">
+
+                                    <li class="nav-item col-6">
+                                        <input class="form-control" type="date" id="DataFatura" name="DataFatura" value="@(new DateOnly(ViewBag.Ano,ViewBag.Mes,1).ToString("yyyy-MM-dd"))">
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-action="Cadastrar" asp-route-IdPainel="@ViewBag.IdPainel" class="btn btn-outline-primary float-right">
+                                            <i class="fas fa-plus"></i> Cadastrar fatura
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @(
+                            Html
+                            .Grid(Model)
+                            .Build(columns =>
+                            {
+                                columns.Add(model => model.Nome).Titled("Nome").Filterable(true);
+                                columns.Add(model => model.Descricao).Titled("Descrição");
+                                columns.Add(model => model.Valor).Formatted("{0:C2}").Titled("Valor");
+                                columns.Add(model => model.ValorPago).Formatted("{0:C2}").Titled("Valor Pago");
+                                columns.Add(model => model.Parcelas).Titled("Parcelas");
+                                columns.Add(model => model.TipoSaldo).Titled("TipoSaldo");
+                                columns.Add(model => model.StatusPagamento).Titled("Pagamento");
+                                columns.Add(model => model.DataPagamento).Titled("Data Pagamento");
+                                columns.Add(model => model.DataFatura).Titled("Data Fatura");
+                                columns.Add(model => model.Categoria!.Nome).Titled("Categoria");
+                                columns.Add().RenderedAs(model =>
+                                Html.Raw($@"<a href=""{Url.Action("Editar")}/{model.Id}"" class=""btn btn-outline-primary""><i class=""fas fa-pen""></i> </a>")
+                                ).Width("5%").Css("dt-center").Titled("#Editar");
+                                columns.Add().RenderedAs(model =>
+                                Html.Raw($@"<a onclick=""removerItemAjax('{model.Id}')"" class=""btn btn-outline-danger""><i class=""fas fa-trash""></i> </a>")
+                                ).Width("5%").Css("dt-center").Titled("#Excluir");
+                            })
+                            .Empty("Sem faturas cadastradas.")
+                            .Filterable()
+                            .Sortable()
+                            .Pageable((x) =>
+                            {
+                                x.RowsPerPage = 50;
+                            })
+                            .RowAttributed(model => new { @class = model.StatusPagamento == StatusPagamento.Pago ? "table-success" : null })
+                            )
+                        @{
+                            decimal saldo = Model.Where(x => x.TipoSaldo == TipoSaldo.Credito).Sum(x => x.ValorPago);
+                            decimal debito = Model.Where(x => x.TipoSaldo == TipoSaldo.Debito).Sum(x => x.Valor);
+                            decimal debitoPago = Model.Where(x => x.TipoSaldo == TipoSaldo.Debito && x.StatusPagamento == StatusPagamento.Pago).Sum(x => x.ValorPago);
+                            decimal saldoRestante = saldo - debitoPago;
+                        }
+                        <strong>Credito:</strong> @saldo.ToString("C") -
+                        <strong>Debito:</strong> @debito.ToString("C") -
+                        <strong>Debito Pago:</strong> @debitoPago.ToString("C") -
+                        <strong>Credito Restante:</strong> @saldoRestante.ToString("C")<br />
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial">
+        <script>
+            $("#DataFatura").change(() => {
+                const data = $("#DataFatura").val()
+                const mes = data.substr(5, 2)
+                const ano = data.substr(0, 4)
+
+                var URL = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                var UrlParms = URL + "?mes=" + mes + "&ano=" + ano;
+                console.log(UrlParms)
+                window.location.href = UrlParms;
+            })
+        </script>
+    }

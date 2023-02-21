@@ -1,0 +1,9 @@
+@if (User.Identity.IsAuthenticated)
+{
+    <li class="nav-item">
+        <a asp-action="Index" asp-controller="Painel" asp-area="" class="nav-link">Paineis</a>
+    </li>
+    <li class="nav-item">
+        <a asp-action="" asp-controller="" asp-area="" class="nav-link"> Relatorios </a>
+    </li>
+}

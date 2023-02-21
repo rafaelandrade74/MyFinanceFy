@@ -1,0 +1,133 @@
+@model PainelDados
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+
+            <div class="col-lg-6">
+
+                <div class="card card-primary">
+
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                        <div class="card-tools">
+                            <ul class="nav nav-pills ml-auto">
+                                <li class="nav-item">
+                                    <a asp-action="Index" asp-route-Id="@Model.IdPainel" class="btn btn-outline-primary float-right">
+                                        <i class="fas fa-arrow-circle-left"></i> Voltar
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <form id="profile-form" method="post">
+
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input asp-for="Id" class="form-control" hidden />
+                                <span asp-validation-for="Id" class="text-danger"></span>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label asp-for="IdPainel" class="form-label"></label>
+                                    <input asp-for="IdPainel" class="form-control" readonly />
+                                    <span asp-validation-for="IdPainel" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label asp-for="DataCadastro" class="form-label"></label>
+                                    <input name="DataCadastro" class="form-control" value="@Model.DataCadastro" readonly />
+                                    <span asp-validation-for="DataCadastro" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label asp-for="Nome" class="form-label"></label>
+                                    <input asp-for="Nome" class="form-control" />
+                                    <span asp-validation-for="Nome" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label asp-for="Descricao" class="form-label"></label>
+                                    <input asp-for="Descricao" class="form-control" />
+                                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+
+                                <div class="form-group col-3">
+                                    <label asp-for="Valor" class="form-label"></label>
+                                    <input asp-for="Valor" class="form-control" />
+                                    <span asp-validation-for="Valor" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-3">
+                                    <label asp-for="ValorPago" class="form-label"></label>
+                                    <input asp-for="ValorPago" class="form-control" />
+                                    <span asp-validation-for="ValorPago" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label asp-for="DataPagamento" class="form-label"></label>
+                                    <input asp-for="DataPagamento" class="form-control" />
+                                    <span asp-validation-for="DataPagamento" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label asp-for="DataFatura" class="form-label"></label>
+                                    <input asp-for="DataFatura" class="form-control" />
+                                    <span asp-validation-for="DataFatura" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-3">
+                                    <label asp-for="Parcelas" class="form-label"></label>
+                                    <input asp-for="Parcelas" class="form-control" />
+                                    <span asp-validation-for="Parcelas" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-3">
+                                    <label asp-for="TipoSaldo" class="form-label"></label>
+                                    <select asp-for="TipoSaldo" class="form-control" asp-items="@Html.GetEnumSelectList<TipoSaldo>()">
+                                    </select>
+                                    <span asp-validation-for="TipoSaldo" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label asp-for="StatusPagamento" class="form-label"></label>
+                                    <select asp-for="StatusPagamento" class="form-control" asp-items="@Html.GetEnumSelectList<StatusPagamento>()">
+                                    </select>
+                                    <span asp-validation-for="StatusPagamento" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label asp-for="IdCategoria" class="form-label"></label>
+                                    <select asp-for="IdCategoria" class="form-control" asp-items="@ViewBag.Categorias">
+                                    </select>
+                                    <span asp-validation-for="IdCategoria" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="card-footer clearfix">
+                            <button type="submit" class="btn btn-primary">Atualizar</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+@section Scripts{
+
+    <partial name="_ValidationScriptsPartial">
+
+        <script>
+            $('#Valor').mask("000.000.000.000.000,00", { reverse: true });
+            $('#ValorPago').mask("000.000.000.000.000,00", { reverse: true });
+        </script>
+    }

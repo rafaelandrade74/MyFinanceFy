@@ -1,0 +1,115 @@
+﻿@model TwoFactorAuthenticationModel
+@{
+    ViewData["Title"] = "Authenticator";
+}
+
+<section class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- Content Header (Page header) -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <partial name="_MenuProfile" for="@ViewData["Title"]" />
+
+
+            <!-- left column -->
+            <div class="col-md-6">
+
+                <!-- general form elements -->
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Configurar aplicativo de dupla autenticação</h3>
+                    </div>
+
+                    @if (Model.Is2faEnabled)
+                    {
+
+                        <div class="card-body row">
+                            <div class="col-md-12">
+                                <!-- /.card -->
+                                @if (Model.RecoveryCodesLeft == 0)
+                                {
+                                    <div class="alert alert-danger">
+                                        <strong>Você não tem mais codigos de backup.</strong>
+                                        <p>Você precisa gerar novos codigos backup</p>
+                                    </div>
+                                }
+                                else if (Model.RecoveryCodesLeft <= 4)
+                                {
+                                    <div class="alert alert-warning">
+                                        <strong>Você tem @Model.RecoveryCodesLeft codigos de backups restantes.</strong>
+                                        <p>Você pode gerar novos codigos backup.</p>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-6 col-6">
+                                @if (Model.IsMachineRemembered)
+                                {
+                                    <form asp-action="ForgetThisBrowser" method="post" class="btn-block">
+                                        <button type="submit" class="btn btn-outline-primary btn-block btn-sm">Esquecer este navegador</button>
+                                    </form>
+                                }
+                                <form asp-action="Disable2fa" method="post" class="btn-block">
+                                    <button class="btn btn-outline-danger btn-block btn-sm" type="submit">Desabilitar autenticador</button>
+                                </form>
+
+                                <form asp-action="GenerateRecoveryCodes" method="post" class="btn-block">
+                                    <button class="btn btn-outline-danger btn-block btn-sm" type="submit">Gerar novos codigos backups</button>
+                                </form>
+                            </div>
+
+                            <div class="col-md-6 col-6">
+                                @if (!Model.HasAuthenticator)
+                                {
+                                    <a id="enable-authenticator" asp-action="EnableAuthenticator" class="btn btn-outline-primary btn-block btn-sm">Adicionar autenticador</a>
+                                }
+                                else
+                                {
+                                    <a id="enable-authenticator" asp-action="EnableAuthenticator" class="btn btn-outline-primary btn-block btn-sm">Habilitar autenticador app</a>
+                                    <form asp-action="ResetAuthenticator" id="reset-authenticator-form" method="post" class="btn-block">
+                                        <button id="reset-authenticator-button" class="btn btn-outline-danger btn-block btn-sm" type="submit">Resetar autenticador</button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div class="card-body row">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <a id="enable-authenticator" asp-action="EnableAuthenticator" class="btn btn-outline-primary btn-block btn-sm">Adicionar autenticador</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <!-- /.card -->
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

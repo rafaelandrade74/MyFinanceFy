@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<section class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                   
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- Content Header (Page header) -->
+@Html.AntiForgeryToken()
+<section class="content">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Bem vindo!</h3>
+                    </div>
+                    <div class="card-body">
+                        Este site é destinado a pessoas que querem organizar sua vida financeira!
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Login" asp-area="Auth" asp-controller="Account"> @Constantes.MyFinancefy </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

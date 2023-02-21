@@ -1,0 +1,107 @@
+﻿@model EnableAuthenticatorModel
+@{
+    ViewData["Title"] = "Configure authenticator app";
+}
+
+<section class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-action="TwoFactorAuthentication">Authenticator</a></li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- Content Header (Page header) -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center">
+            <partial name="_MenuProfile" for="@ViewData["Title"]" />
+
+
+
+
+            <!-- left column -->
+            <div class="col-md-6">
+                <!-- general form elements -->
+
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Configurar aplicativo de dupla autenticação</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+
+                    <div class="card-body row">
+                        <p>Para cadastrar o autenticador de dupla confiança siga os passos abaixo:</p>
+                        <ol class="list">
+                            <li>
+                                <p>
+                                    Faça download do aplicativo autenticador da Microsoft para
+                                    <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> e
+                                    <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> ou
+                                    Google Authenticator para
+                                    <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a> e
+                                    <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
+                                </p>
+                            </li>
+                            <li>
+                                <p>Scaneie ou digite o codigo: <kbd>@Model.SharedKey</kbd> no seu aplicativo de autenticação.</p>
+                                <div id="qrCode"></div>
+                                <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+                            </li>
+                            <li>
+                                <p>
+                                    Depois de digitalizar o código QR ou inserir a chave acima, seu aplicativo de autenticação de dois fatores fornecerá a você
+                                     um código único. Digite o código na caixa de confirmação abaixo.
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <form id="send-code" method="post">
+                                            <input type="hidden" asp-for="SharedKey" class="form-control" />
+                                            <input type="hidden" asp-for="AuthenticatorUri" class="form-control" />
+                                            <div class="form-group">
+                                                <label asp-for="Code" class="control-label form-label">Codigo do autenticador</label>
+                                                <input asp-for="Code" class="form-control" autocomplete="off" />                                                
+                                                <span asp-validation-for="Code" class="text-danger"></span>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Confirmar</button>
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    
+
+                </div>
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+    </div>
+</section>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        window.addEventListener("load", () => {
+            const uri = document.getElementById("qrCodeData").getAttribute('data-url');
+            new QRCode(document.getElementById("qrCode"),
+                {
+                    text: uri,
+                    width: 150,
+                    height: 150
+                });
+        });
+    </script>
+}
