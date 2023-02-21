@@ -2,7 +2,7 @@
 Meu app de finanças pessoal
 
 
-#install
+# install
 
 dotnet ef database update
 
