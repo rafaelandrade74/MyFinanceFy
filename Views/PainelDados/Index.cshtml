@@ -1,8 +1,12 @@
-@model IEnumerable<PainelDados>
+@model PainelDadosRelFinalModel
 @{
     ViewData["Title"] = "Paineis";
 }
-
+<style>
+    .table-condensed {
+        font-size: 12px;
+    }
+</style>
 <section class="content-header">
     <div class="container">
         <div class="row mb-2">
@@ -46,45 +50,62 @@
                     <div class="card-body">
                         @(
                             Html
-                            .Grid(Model)
+                            .Grid("MvcGrid/_GridPainelDadosView", Model.PainelDadosRel)
                             .Build(columns =>
                             {
-                                columns.Add(model => model.Nome).Titled("Nome").Filterable(true);
-                                columns.Add(model => model.Descricao).Titled("Descrição");
-                                columns.Add(model => model.Valor).Formatted("{0:C2}").Titled("Valor");
-                                columns.Add(model => model.ValorPago).Formatted("{0:C2}").Titled("Valor Pago");
-                                columns.Add(model => model.Parcelas).Titled("Parcelas");
-                                columns.Add(model => model.TipoSaldo).Titled("TipoSaldo");
-                                columns.Add(model => model.StatusPagamento).Titled("Pagamento");
-                                columns.Add(model => model.DataPagamento).Titled("Data Pagamento");
-                                columns.Add(model => model.DataFatura).Titled("Data Fatura");
-                                columns.Add(model => model.Categoria!.Nome).Titled("Categoria");
+                                columns.Add(model => model.Categoria).Titled("Categoria").Css("bg-dark");
+                                columns.Add(model => model.Descricao).Titled("Descrição").Css("bg-dark");
+                                columns.Add(model => model.JanId).Hidden();
+                                columns.Add(model => model.JanValor).Titled("Janeiro").Formatted("{0:C2}").Width("5%");
+                                columns.Add(model => model.FevId).Hidden();
+                                columns.Add(model => model.FevValor).Titled("Fevereiro").Formatted("{0:C2}").Width("5%");
+                                columns.Add(model => model.MarId).Hidden();
+                                columns.Add(model => model.MarValor).Titled("Março").Formatted("{0:C2}");
+                                columns.Add(model => model.AbrId).Hidden();
+                                columns.Add(model => model.AbrValor).Titled("Abril").Formatted("{0:C2}");
+                                columns.Add(model => model.MaiId).Hidden();
+                                columns.Add(model => model.MaiValor).Titled("Maio").Formatted("{0:C2}");
+                                columns.Add(model => model.JunId).Hidden();
+                                columns.Add(model => model.JunValor).Titled("Junho").Formatted("{0:C2}");
+                                columns.Add(model => model.JulId).Hidden();
+                                columns.Add(model => model.JulValor).Titled("Julho").Formatted("{0:C2}");
+                                columns.Add(model => model.AgoId).Hidden();
+                                columns.Add(model => model.AgoValor).Titled("Agosto").Formatted("{0:C2}");
+                                columns.Add(model => model.SetId).Hidden();
+                                columns.Add(model => model.SetValor).Titled("Setembro").Formatted("{0:C2}");
+                                columns.Add(model => model.OutId).Hidden();
+                                columns.Add(model => model.OutValor).Titled("Outubro").Formatted("{0:C2}");
+                                columns.Add(model => model.NovId).Hidden();
+                                columns.Add(model => model.NovValor).Titled("Novembro").Formatted("{0:C2}");
+                                columns.Add(model => model.DezId).Hidden();
+                                columns.Add(model => model.DezValor).Titled("Dezembro").Formatted("{0:C2}");
                                 columns.Add().RenderedAs(model =>
-                                Html.Raw($@"<a href=""{Url.Action("Editar")}/{model.Id}"" class=""btn btn-outline-primary""><i class=""fas fa-pen""></i> </a>")
-                                ).Width("5%").Css("dt-center").Titled("#Editar");
-                                columns.Add().RenderedAs(model =>
-                                Html.Raw($@"<a onclick=""removerItemAjax('{model.Id}')"" class=""btn btn-outline-danger""><i class=""fas fa-trash""></i> </a>")
-                                ).Width("5%").Css("dt-center").Titled("#Excluir");
+                                {
+                                    decimal? soma = model.JanValor +
+                                                    model.FevValor +
+                                                    model.MarValor +
+                                                    model.AbrValor +
+                                                    model.MaiValor +
+                                                    model.JunValor +
+                                                    model.JulValor +
+                                                    model.AgoValor +
+                                                    model.SetValor +
+                                                    model.OutValor +
+                                                    model.NovValor +
+                                                    model.DezValor;
+                                    return Html.Raw(@$"<b>{soma:C2}</b>");
+                                }).Titled("Total Ano").Css("bg-primary");
+
+
                             })
                             .Empty("Sem faturas cadastradas.")
                             .Filterable()
                             .Sortable()
-                            .Pageable((x) =>
-                            {
-                                x.RowsPerPage = 50;
-                            })
-                            .RowAttributed(model => new { @class = model.StatusPagamento == StatusPagamento.Pago ? "table-success" : null })
+                            .Css("table-condensed")
+                            .UsingFooter("MvcGrid/_GridPainelDadosViewFooter")
+
                             )
-                        @{
-                            decimal saldo = Model.Where(x => x.TipoSaldo == TipoSaldo.Credito).Sum(x => x.ValorPago);
-                            decimal debito = Model.Where(x => x.TipoSaldo == TipoSaldo.Debito).Sum(x => x.Valor);
-                            decimal debitoPago = Model.Where(x => x.TipoSaldo == TipoSaldo.Debito && x.StatusPagamento == StatusPagamento.Pago).Sum(x => x.ValorPago);
-                            decimal saldoRestante = saldo - debitoPago;
-                        }
-                        <strong>Credito:</strong> @saldo.ToString("C") -
-                        <strong>Debito:</strong> @debito.ToString("C") -
-                        <strong>Debito Pago:</strong> @debitoPago.ToString("C") -
-                        <strong>Credito Restante:</strong> @saldoRestante.ToString("C")<br />
+
 
                     </div>
                 </div>
@@ -92,7 +113,7 @@
             </div>
         </div>
     </div>
-    </div>
+
 </section>
 
 
@@ -109,5 +130,22 @@
                 console.log(UrlParms)
                 window.location.href = UrlParms;
             })
+        </script>
+
+        <script>
+            const grid = document.querySelector(".mvc-grid");
+
+            // Triggered when grid's row is clicked. It's recommended to use event delegation in ajax scenarios.
+            document.addEventListener("rowclick", e => {
+                //e.detail.data - clicked row's data from columns.
+                //e.detail.grid - grid's instance.
+                //e.detail.originalEvent - original tr click event which triggered the rowclick.
+                const dataid = e.detail.originalEvent.target.getAttribute("data-id");
+                if (dataid != null && dataid != "") {
+                    console.log("@Url.Action("Editar")/" + dataid);
+                    location.href = "@Url.Action("Editar")/" + dataid;
+                }
+
+            });
         </script>
     }

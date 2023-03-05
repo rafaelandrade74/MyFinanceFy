@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MyFinanceFy.Data;
 using MyFinanceFy.Libs.Ajuda;
 using MyFinanceFy.Libs.Enums;
 using MyFinanceFy.Models;
@@ -16,14 +17,16 @@ namespace MyFinanceFy.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IPainelDadosRepository _painelDadosRepository;
         private readonly ICategoriaRepository _categoriaRepository;
+        private readonly ApplicationDbContext _applicationDb;
         private readonly UserManager<Usuario> _userManager;
 
-        public PainelDadosController(ILogger<HomeController> logger, IPainelDadosRepository painelDadosRepository, UserManager<Usuario> userManager, ICategoriaRepository categoriaRepository)
+        public PainelDadosController(ILogger<HomeController> logger, IPainelDadosRepository painelDadosRepository, UserManager<Usuario> userManager, ICategoriaRepository categoriaRepository, ApplicationDbContext applicationDb)
         {
             _logger = logger;
             _painelDadosRepository = painelDadosRepository;
             _userManager = userManager;
             _categoriaRepository = categoriaRepository;
+            _applicationDb = applicationDb;
         }
         [HttpGet]
         public IActionResult Index(string Id, string? mes = null, string? ano = null)
@@ -34,12 +37,14 @@ namespace MyFinanceFy.Controllers
             ViewBag.Ano = anoDt;
             
             if (string.IsNullOrEmpty(Id)) return RedirectToAction("Index", "Painel");
-            IEnumerable<PainelDados?> painels = _painelDadosRepository.FindAllWithIncludesAsQueryble()
-                .Where(x => x.IdPainel == Id && x.DataFatura.Month == mesDt && x.DataFatura.Year == anoDt)
+           
+            IEnumerable<PainelDadosRelModel>? painels = _applicationDb.PainelDadosView?
+                .Where(x=> x.IdPainel == Id && x.Ano == anoDt)
                 .ToList();
+            
             TempData["UrlRemover"] = Url.Action(nameof(Remover));
             ViewBag.IdPainel = Id;
-            return View(painels);
+            return View(new PainelDadosRelFinalModel { PainelDadosRel = painels});
         }
         [HttpGet]
         public async Task<IActionResult> Cadastrar(string IdPainel)

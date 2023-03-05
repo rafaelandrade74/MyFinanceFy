@@ -1,0 +1,35 @@
+﻿@model IGrid<PainelDadosRelModel>
+
+<tr>
+    <td class="bg-primary" colspan="2"><b>Soma total</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.JanValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.FevValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.MarValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.AbrValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.MaiValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.JunValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.JulValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.AgoValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.SetValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.OutValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.NovValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary"><b>@(Model.Rows.Sum(row => row.Model.DezValor)!.Value.ToString("C2"))</b></td>
+    <td class="bg-primary">
+        <b>
+            @(Model.Rows.Sum(row =>
+                row.Model.JanValor +
+                row.Model.FevValor +
+                row.Model.MarValor +
+                row.Model.AbrValor +
+                row.Model.MaiValor +
+                row.Model.JunValor +
+                row.Model.JulValor +
+                row.Model.AgoValor +
+                row.Model.SetValor +
+                row.Model.OutValor +
+                row.Model.NovValor +
+                row.Model.DezValor
+                )!.Value.ToString("C2"))
+        </b>
+    </td>
+</tr>

@@ -13,9 +13,8 @@ namespace MyFinanceFy.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string? Id { get; set; }
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
-        public string Nome { get; set; } = null!;
-        [Required(ErrorMessage = "O campo {0} é obrigatorio")]
-        public string Descricao { get; set; } = null!;
+        public string Descricao { get; set; } = null!;        
+        public string? Observacao { get; set; }
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal Valor { get; set; }
@@ -28,6 +27,7 @@ namespace MyFinanceFy.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
         public DateTime? DataPagamento { get; set; }
         public StatusPagamento StatusPagamento { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
         public decimal ValorPago { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyFinanceFy.Data;
 
@@ -10,9 +11,11 @@ using MyFinanceFy.Data;
 namespace MyFinanceFy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230221162656_ajusteColunaDescricao")]
+    partial class ajusteColunaDescricao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -354,6 +357,7 @@ namespace MyFinanceFy.Migrations
                         .HasColumnType("varchar(95)");
 
                     b.Property<string>("Observacao")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Parcelas")
@@ -369,7 +373,7 @@ namespace MyFinanceFy.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal>("ValorPago")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
