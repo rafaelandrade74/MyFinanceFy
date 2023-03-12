@@ -42,7 +42,6 @@ namespace MyFinanceFy.Controllers
                 .Where(x=> x.IdPainel == Id && x.Ano == anoDt)
                 .ToList();
             
-            TempData["UrlRemover"] = Url.Action(nameof(Remover));
             ViewBag.IdPainel = Id;
             return View(new PainelDadosRelFinalModel { PainelDadosRel = painels});
         }
@@ -92,6 +91,8 @@ namespace MyFinanceFy.Controllers
         {
             ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
             var painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble().FirstOrDefaultAsync(x=> x.Id == Id);
+            TempData["UrlRemover"] = Url.Action(nameof(Remover));
+            TempData["UrlRemoverRedirect"] = Url.Action(nameof(Index), new {Id = painelDados.IdPainel});
             return View(painelDados);
         }
         [HttpPost, ValidateAntiForgeryToken]

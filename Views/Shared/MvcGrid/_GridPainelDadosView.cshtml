@@ -140,55 +140,73 @@
                         {
                             String classes = (column.IsHidden ? column.CssClasses + " mvc-grid-hidden" : column.CssClasses).Trim();
                             String? atributo = string.Empty;
+                            String? atributoCss = string.Empty;
 
                             switch (column.Name)
                             {
                                 case nameof(PainelDadosRelModel.JanValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JanId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JanId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JanStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.FevValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.FevId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.FevId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.FevStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.MarValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.MarId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.MarId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.MarStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.AbrValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.AbrId)).FirstOrDefault()?.ValueFor(row).ToString())}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.AbrId)).FirstOrDefault()?.ValueFor(row).ToString())}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.AbrStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.MaiValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.MaiId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.MaiId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.MaiStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.JunValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JunId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JunId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JunStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.JulValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JunId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JulId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.JulStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.AgoValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.AgoId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.AgoId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.AgoStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.SetValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.SetId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.SetId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.SetStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.OutValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.OutId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.OutId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.OutStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.NovValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.NovId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.NovId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.NovStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                                 case nameof(PainelDadosRelModel.DezValor):
-                                    atributo = @$"data-id={(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.DezId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributo = @$"{(Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.DezId)).FirstOrDefault()?.ValueFor(row).ToString() )}";
+                                    atributoCss = Model.Columns.Where(x => x.Name == nameof(PainelDadosRelModel.DezStatusPagamento)).FirstOrDefault()?.ValueFor(row).ToString() == "Pago" ? "bg-success" : "table-warning";
                                     break;
                             }
-
-                            if (String.IsNullOrEmpty(classes))
+                            <td 
+                                @(String.IsNullOrEmpty(atributo) ? "" : $"data-id={atributo}")
+                                @(String.IsNullOrEmpty(atributoCss) ? "" : $"class={atributoCss}")
+                                @(String.IsNullOrEmpty(classes) ? "" : $"class={classes}")>
+                                @column.ValueFor(row)
+                            </td>
+                           @* if (String.IsNullOrEmpty(classes))
                             {
-                        <td @(atributo)>@column.ValueFor(row)</td>
+                        <td @(atributo) class="@atributoCss">@column.ValueFor(row)</td>
                             }
                             else
                             {
-                        <td @(atributo) class="@classes">@column.ValueFor(row)</td>
-                            }
+                        <td @(atributo) class="@classes @atributoCss">@column.ValueFor(row)</td>
+                            }*@
                         }
                 </!tr>
                 }

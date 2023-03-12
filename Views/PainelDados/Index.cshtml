@@ -56,28 +56,40 @@
                                 columns.Add(model => model.Categoria).Titled("Categoria").Css("bg-dark");
                                 columns.Add(model => model.Descricao).Titled("Descrição").Css("bg-dark");
                                 columns.Add(model => model.JanId).Hidden();
+                                columns.Add(model => model.JanStatusPagamento).Hidden();
                                 columns.Add(model => model.JanValor).Titled("Janeiro").Formatted("{0:C2}").Width("5%");
                                 columns.Add(model => model.FevId).Hidden();
+                                columns.Add(model => model.FevStatusPagamento).Hidden();
                                 columns.Add(model => model.FevValor).Titled("Fevereiro").Formatted("{0:C2}").Width("5%");
                                 columns.Add(model => model.MarId).Hidden();
+                                columns.Add(model => model.MarStatusPagamento).Hidden();
                                 columns.Add(model => model.MarValor).Titled("Março").Formatted("{0:C2}");
                                 columns.Add(model => model.AbrId).Hidden();
+                                columns.Add(model => model.AbrStatusPagamento).Hidden();
                                 columns.Add(model => model.AbrValor).Titled("Abril").Formatted("{0:C2}");
                                 columns.Add(model => model.MaiId).Hidden();
+                                columns.Add(model => model.MaiStatusPagamento).Hidden();
                                 columns.Add(model => model.MaiValor).Titled("Maio").Formatted("{0:C2}");
                                 columns.Add(model => model.JunId).Hidden();
+                                columns.Add(model => model.JunStatusPagamento).Hidden();
                                 columns.Add(model => model.JunValor).Titled("Junho").Formatted("{0:C2}");
                                 columns.Add(model => model.JulId).Hidden();
+                                columns.Add(model => model.JulStatusPagamento).Hidden();
                                 columns.Add(model => model.JulValor).Titled("Julho").Formatted("{0:C2}");
                                 columns.Add(model => model.AgoId).Hidden();
+                                columns.Add(model => model.AgoStatusPagamento).Hidden();
                                 columns.Add(model => model.AgoValor).Titled("Agosto").Formatted("{0:C2}");
                                 columns.Add(model => model.SetId).Hidden();
+                                columns.Add(model => model.SetStatusPagamento).Hidden();
                                 columns.Add(model => model.SetValor).Titled("Setembro").Formatted("{0:C2}");
                                 columns.Add(model => model.OutId).Hidden();
+                                columns.Add(model => model.OutStatusPagamento).Hidden();
                                 columns.Add(model => model.OutValor).Titled("Outubro").Formatted("{0:C2}");
                                 columns.Add(model => model.NovId).Hidden();
+                                columns.Add(model => model.NovStatusPagamento).Hidden();
                                 columns.Add(model => model.NovValor).Titled("Novembro").Formatted("{0:C2}");
                                 columns.Add(model => model.DezId).Hidden();
+                                columns.Add(model => model.DezStatusPagamento).Hidden();
                                 columns.Add(model => model.DezValor).Titled("Dezembro").Formatted("{0:C2}");
                                 columns.Add().RenderedAs(model =>
                                 {
@@ -94,7 +106,25 @@
                                                     model.NovValor +
                                                     model.DezValor;
                                     return Html.Raw(@$"<b>{soma:C2}</b>");
-                                }).Titled("Total Ano").Css("bg-primary");
+                                }).Titled("Total Ano").Css("bg-info");
+                                columns.Add().RenderedAs(model =>
+                                {
+                                    decimal? soma = 0;
+
+                                    soma += model.JanStatusPagamento == StatusPagamento.Pago ? model.JanValorPago : 0;
+                                    soma += model.FevStatusPagamento == StatusPagamento.Pago ? model.FevValorPago : 0;
+                                    soma += model.MarStatusPagamento == StatusPagamento.Pago ? model.MarValorPago : 0;
+                                    soma += model.AbrStatusPagamento == StatusPagamento.Pago ? model.AbrValorPago : 0;
+                                    soma += model.MaiStatusPagamento == StatusPagamento.Pago ? model.MaiValorPago : 0;
+                                    soma += model.JunStatusPagamento == StatusPagamento.Pago ? model.JunValorPago : 0;
+                                    soma += model.JulStatusPagamento == StatusPagamento.Pago ? model.JulValorPago : 0;
+                                    soma += model.AgoStatusPagamento == StatusPagamento.Pago ? model.AgoValorPago : 0;
+                                    soma += model.SetStatusPagamento == StatusPagamento.Pago ? model.SetValorPago : 0;
+                                    soma += model.OutStatusPagamento == StatusPagamento.Pago ? model.OutValorPago : 0;
+                                    soma += model.NovStatusPagamento == StatusPagamento.Pago ? model.NovValorPago : 0;
+                                    soma += model.DezStatusPagamento == StatusPagamento.Pago ? model.DezValorPago : 0;
+                                    return Html.Raw(@$"<b>{soma:C2}</b>");
+                                }).Titled("Total Pago Ano").Css("bg-info");
 
 
                             })

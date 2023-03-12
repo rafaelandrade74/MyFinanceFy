@@ -46,7 +46,9 @@
                                 icon: 'success',
                                 confirmButtonText: 'Ok'
                             }).then(() => {
-                                document.location.reload();
+                                const urlRedirect = '@(TempData["UrlRemoverRedirect"] ?? "")';
+                                if (urlRedirect != "") document.location.href = urlRedirect;
+                                else document.location.reload();
                             });
                         }
                     });
