@@ -15,11 +15,10 @@ SELECT
 fpd.Id,
 fc.Nome AS Categoria,
 fpd.Descricao,
-CASE fpd.TipoSaldo 
-	WHEN 0 THEN fpd.Valor - fpd.ValorPago
-	ELSE fpd.ValorPago
-END Valor,
+fpd.Valor,
+fpd.ValorPago,
 fpd.TipoSaldo,
+fpd.StatusPagamento,
 EXTRACT(YEAR FROM fpd.DataFatura) AS Ano,
 Month(fpd.DataFatura) AS Mes,
 fpd.IdPainel 
@@ -39,6 +38,11 @@ CASE
 	ELSE 0
 END JanValor,
 CASE 
+	WHEN jan.ValorPago IS NOT NULL THEN jan.ValorPago 
+	ELSE 0
+END JanValorPago,
+CASE WHEN jan.StatusPagamento IS NOT NULL THEN jan.StatusPagamento ELSE 0 END JanStatusPagamento,
+CASE 
 	WHEN fev.Id IS NOT NULL THEN fev.Id 
 	ELSE ""
 END FevId,
@@ -46,6 +50,11 @@ CASE
 	WHEN fev.Valor IS NOT NULL THEN fev.Valor 
 	ELSE 0
 END FevValor,
+CASE 
+	WHEN fev.ValorPago IS NOT NULL THEN fev.ValorPago 
+	ELSE 0
+END FevValorPago,
+CASE WHEN fev.StatusPagamento IS NOT NULL THEN fev.StatusPagamento ELSE 0 END FevStatusPagamento,
 CASE 
 	WHEN mar.Id IS NOT NULL THEN mar.Id 
 	ELSE ""
@@ -55,6 +64,14 @@ CASE
 	ELSE 0
 END MarValor,
 CASE 
+	WHEN mar.ValorPago IS NOT NULL THEN mar.ValorPago 
+	ELSE 0
+END MarValorPago,
+CASE 
+	WHEN mar.StatusPagamento IS NOT NULL THEN mar.StatusPagamento
+	ELSE 0
+END MarStatusPagamento,
+CASE 
 	WHEN abr.Id IS NOT NULL THEN abr.Id 
 	ELSE ""
 END AbrId,
@@ -62,6 +79,14 @@ CASE
 	WHEN abr.Valor IS NOT NULL THEN abr.Valor 
 	ELSE 0
 END AbrValor,
+CASE 
+	WHEN abr.ValorPago IS NOT NULL THEN abr.ValorPago 
+	ELSE 0
+END AbrValorPago,
+CASE 
+	WHEN abr.StatusPagamento IS NOT NULL THEN abr.StatusPagamento
+	ELSE 0
+END AbrStatusPagamento,
 CASE 
 	WHEN mai.Id IS NOT NULL THEN mai.Id 
 	ELSE ""
@@ -71,6 +96,14 @@ CASE
 	ELSE 0
 END MaiValor,
 CASE 
+	WHEN mai.ValorPago IS NOT NULL THEN mai.ValorPago 
+	ELSE 0
+END MaiValorPago,
+CASE 
+	WHEN mai.StatusPagamento IS NOT NULL THEN mai.StatusPagamento
+	ELSE 0
+END MaiStatusPagamento,
+CASE 
 	WHEN jun.Id IS NOT NULL THEN jun.Id 
 	ELSE ""
 END JunId,
@@ -78,6 +111,14 @@ CASE
 	WHEN jun.Valor IS NOT NULL THEN jun.Valor 
 	ELSE 0
 END JunValor,
+CASE 
+	WHEN jun.ValorPago IS NOT NULL THEN jun.ValorPago 
+	ELSE 0
+END JunValorPago,
+CASE 
+	WHEN jun.StatusPagamento IS NOT NULL THEN jun.StatusPagamento
+	ELSE 0
+END JunStatusPagamento,
 CASE 
 	WHEN jul.Id IS NOT NULL THEN jul.Id 
 	ELSE ""
@@ -87,6 +128,14 @@ CASE
 	ELSE 0
 END JulValor,
 CASE 
+	WHEN jul.ValorPago IS NOT NULL THEN jul.ValorPago 
+	ELSE 0
+END JulValorPago,
+CASE 
+	WHEN jul.StatusPagamento IS NOT NULL THEN jul.StatusPagamento
+	ELSE 0
+END JulStatusPagamento,
+CASE 
 	WHEN ago.Id IS NOT NULL THEN ago.Id 
 	ELSE ""
 END AgoId,
@@ -94,6 +143,14 @@ CASE
 	WHEN ago.Valor IS NOT NULL THEN ago.Valor 
 	ELSE 0
 END AgoValor,
+CASE 
+	WHEN ago.ValorPago IS NOT NULL THEN ago.ValorPago 
+	ELSE 0
+END AgoValorPago,
+CASE 
+	WHEN ago.StatusPagamento IS NOT NULL THEN ago.StatusPagamento 
+	ELSE 0 
+END AgoStatusPagamento,
 CASE 
 	WHEN setem.Id IS NOT NULL THEN setem.Id 
 	ELSE ""
@@ -103,6 +160,14 @@ CASE
 	ELSE 0
 END SetValor,
 CASE 
+	WHEN setem.ValorPago IS NOT NULL THEN setem.ValorPago 
+	ELSE 0
+END SetValorPago,
+CASE 
+	WHEN setem.StatusPagamento IS NOT NULL THEN setem.StatusPagamento 
+	ELSE 0 
+END SetStatusPagamento,
+CASE 
 	WHEN outu.Id IS NOT NULL THEN outu.Id 
 	ELSE ""
 END OutId,
@@ -110,6 +175,14 @@ CASE
 	WHEN outu.Valor IS NOT NULL THEN outu.Valor 
 	ELSE 0
 END OutValor,
+CASE 
+	WHEN outu.ValorPago IS NOT NULL THEN outu.ValorPago 
+	ELSE 0
+END OutValorPago,
+CASE 
+	WHEN outu.StatusPagamento IS NOT NULL THEN outu.StatusPagamento
+	ELSE 0
+END OutStatusPagamento,
 CASE 
 	WHEN nov.Id IS NOT NULL THEN nov.Id 
 	ELSE ""
@@ -119,13 +192,29 @@ CASE
 	ELSE 0
 END NovValor,
 CASE 
+	WHEN nov.ValorPago IS NOT NULL THEN nov.ValorPago 
+	ELSE 0
+END NovValorPago,
+CASE 
+	WHEN nov.StatusPagamento IS NOT NULL THEN nov.StatusPagamento
+	ELSE 0
+END NovStatusPagamento,
+CASE 
 	WHEN dez.Id IS NOT NULL THEN dez.Id 
 	ELSE ""
 END DezId,
 CASE 
 	WHEN dez.Valor IS NOT NULL THEN dez.Valor 
 	ELSE 0
-END DezValor
+END DezValor,
+CASE 
+	WHEN dez.ValorPago IS NOT NULL THEN dez.ValorPago 
+	ELSE 0
+END DezValorPago,
+CASE 
+	WHEN dez.StatusPagamento IS NOT NULL THEN dez.StatusPagamento
+	ELSE 0
+END DezStatusPagamento
 FROM view_fin_painel_dados_cat a
 LEFT JOIN view_fin_painel_dados jan 
 	ON jan.IdPainel = a.IdPainel 
@@ -199,30 +288,7 @@ LEFT JOIN view_fin_painel_dados dez
 		AND dez.Categoria = a.Categoria 
 		AND dez.Descricao = a.Descricao 
 		AND dez.Mes = 12");
-			migrationBuilder.Sql(@"CREATE VIEW view_fin_painel_dados_rel_sum AS
-SELECT
-IdPainel,
-Categoria,
-Descricao,
-Ano,
-SUM(JanValor) JanValor,
-SUM(FevValor) FevValor,
-SUM(MarValor) MarValor,
-SUM(AbrValor) AbrValor,
-SUM(MaiValor) MaiValor,
-SUM(JunValor) JunValor,
-SUM(JulValor) JulValor,
-SUM(AgoValor) AgoValor,
-SUM(SetValor) SetValor,
-SUM(OutValor) OutValor,
-SUM(NovValor) NovValor,
-SUM(DezValor) DezValor 
-FROM view_fin_painel_dados_rel 
-group by 
-IdPainel,
-Categoria,
-Descricao,
-Ano");
+			
         }
 
         /// <inheritdoc />
@@ -231,7 +297,7 @@ Ano");
 			migrationBuilder.Sql("DROP VIEW view_fin_painel_dados");
             migrationBuilder.Sql("DROP VIEW view_fin_painel_dados_cat");
             migrationBuilder.Sql("DROP VIEW view_fin_painel_dados_rel");
-            migrationBuilder.Sql("DROP VIEW view_fin_painel_dados_rel_sum");
+            
         }
     }
 }
