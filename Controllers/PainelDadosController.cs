@@ -9,6 +9,8 @@ using MyFinanceFy.Libs.Enums;
 using MyFinanceFy.Models;
 using MyFinanceFy.Repository.Contracts;
 using System.Globalization;
+using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MyFinanceFy.Controllers
 {
@@ -29,37 +31,60 @@ namespace MyFinanceFy.Controllers
             _applicationDb = applicationDb;
         }
         [HttpGet]
-        public IActionResult Index(string Id, string? mes = null, string? ano = null)
+        public IActionResult Index(string Id, string? ano = null)
         {
-            int mesDt = mes == null ? DateTime.Now.Month : int.Parse(mes);
             int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
-            ViewBag.Mes = mesDt;
             ViewBag.Ano = anoDt;
-            
+
             if (string.IsNullOrEmpty(Id)) return RedirectToAction("Index", "Painel");
-           
+
             IEnumerable<PainelDadosRelModel>? painels = _applicationDb.PainelDadosView?
-                .Where(x=> x.IdPainel == Id && x.Ano == anoDt)
+                .Where(x => x.IdPainel == Id && x.Ano == anoDt)
+                .OrderByDescending(x=> x.JanTipoSaldo)
+                .OrderByDescending(x=> x.FevTipoSaldo)
+                .OrderByDescending(x=> x.MarTipoSaldo)
+                .OrderByDescending(x=> x.AbrTipoSaldo)
+                .OrderByDescending(x=> x.MaiTipoSaldo)
+                .OrderByDescending(x=> x.JunTipoSaldo)
+                .OrderByDescending(x=> x.JulTipoSaldo)
+                .OrderByDescending(x=> x.AgoTipoSaldo)
+                .OrderByDescending(x=> x.SetTipoSaldo)
+                .OrderByDescending(x=> x.OutTipoSaldo)
+                .OrderByDescending(x=> x.NovTipoSaldo)
+                .OrderByDescending(x=> x.DezTipoSaldo)
+                .OrderByDescending(x => x.Categoria)
                 .ToList();
-            
+
             ViewBag.IdPainel = Id;
-            return View(new PainelDadosRelFinalModel { PainelDadosRel = painels});
+            List<int>? listaAnosBase = _applicationDb.PainelDadosView?.Where(x => x.IdPainel == Id).Select(x => x.Ano).Distinct().ToList();
+            listaAnosBase ??= new List<int>();
+            if (!listaAnosBase!.Any()) listaAnosBase.Add(DateTime.Now.Year);
+            var anoMax = listaAnosBase!.Max() + 1;
+            for (int i = anoMax; i < anoMax + 3; i++)
+            {
+                listaAnosBase.Add(i);
+            }
+            ViewBag.ListaAnos = listaAnosBase!.Select(x => new SelectListItem(x.ToString(), x.ToString())).OrderBy(x => x.Text).ToList();
+            return View(new PainelDadosRelFinalModel { PainelDadosRel = painels! });
         }
         [HttpGet]
-        public async Task<IActionResult> Cadastrar(string IdPainel)
+        public async Task<IActionResult> Cadastrar(string IdPainel,string? ano = null)
         {
+            int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
+            ViewBag.Ano = anoDt;
             ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
             return View(new PainelDados() { IdPainel = IdPainel });
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Cadastrar([FromForm] PainelDados painel)
+        public async Task<IActionResult> Cadastrar([FromForm] PainelDados painel, string? ano = null)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
                     if (painel.StatusPagamento == StatusPagamento.Pago) painel.DataPagamento = DateTime.Now;
-                    for (int i = 1; i <= painel.Parcelas; )
+                    for (int i = 1; i <= painel.Parcelas;)
                     {
                         var retorno = await _painelDadosRepository.CreateAsync(painel);
                         if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
@@ -70,8 +95,8 @@ namespace MyFinanceFy.Controllers
                         painel.DataPagamento = null;
                         painel.DataFatura = painel.DataFatura.AddMonths(1);
                     }
-                    
-                    return RedirectToAction(nameof(Index), routeValues: new { Id = painel.IdPainel });
+
+                    return RedirectToAction(nameof(Index), routeValues: new { Id = painel.IdPainel , ano});
                 }
             }
             catch (Exception ex)
@@ -87,16 +112,19 @@ namespace MyFinanceFy.Controllers
 
             return View(painel);
         }
-        public async Task<IActionResult> Editar(string Id)
+        public async Task<IActionResult> Editar(string Id, string? ano = null)
         {
+            int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
+            ViewBag.Ano = anoDt;
             ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
-            var painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble().FirstOrDefaultAsync(x=> x.Id == Id);
+            var painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble().FirstOrDefaultAsync(x => x.Id == Id);
             TempData["UrlRemover"] = Url.Action(nameof(Remover));
-            TempData["UrlRemoverRedirect"] = Url.Action(nameof(Index), new {Id = painelDados.IdPainel});
+            TempData["UrlRemoverRedirect"] = Url.Action(nameof(Index), new { Id = painelDados!.IdPainel });
+
             return View(painelDados);
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar([FromForm] PainelDados painel)
+        public async Task<IActionResult> Editar([FromForm] PainelDados painel, string? ano = null)
         {
             try
             {
@@ -105,7 +133,7 @@ namespace MyFinanceFy.Controllers
                     var retorno = await _painelDadosRepository.UpdateAsync(painel);
                     if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
                     else TempData["MSG_E"] = retorno.Mensagem;
-                    return RedirectToAction(nameof(Index), routeValues: new { Id = painel.IdPainel });
+                    return RedirectToAction(nameof(Index), routeValues: new { Id = painel.IdPainel, ano });
                 }
             }
             catch (Exception ex)

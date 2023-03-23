@@ -199,14 +199,7 @@
                                 @(String.IsNullOrEmpty(classes) ? "" : $"class={classes}")>
                                 @column.ValueFor(row)
                             </td>
-                           @* if (String.IsNullOrEmpty(classes))
-                            {
-                        <td @(atributo) class="@atributoCss">@column.ValueFor(row)</td>
-                            }
-                            else
-                            {
-                        <td @(atributo) class="@classes @atributoCss">@column.ValueFor(row)</td>
-                            }*@
+                          
                         }
                 </!tr>
                 }

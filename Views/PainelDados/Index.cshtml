@@ -1,6 +1,7 @@
 @model PainelDadosRelFinalModel
 @{
     ViewData["Title"] = "Paineis";
+    int ano = ViewBag.Ano;
 }
 <style>
     .table-condensed {
@@ -35,11 +36,11 @@
                             <div class="row">
                                 <ul class="nav nav-pills ml-auto">
 
-                                    <li class="nav-item col-6">
-                                        <input class="form-control" type="date" id="DataFatura" name="DataFatura" value="@(new DateOnly(ViewBag.Ano,ViewBag.Mes,1).ToString("yyyy-MM-dd"))">
+                                    <li class="nav-item col-xs-6">
+                                        <select id="DataFatura" class="form-control" asp-for="@ano" asp-items="@ViewBag.ListaAnos"></select>
                                     </li>
                                     <li class="nav-item">
-                                        <a asp-action="Cadastrar" asp-route-IdPainel="@ViewBag.IdPainel" class="btn btn-outline-primary float-right">
+                                        <a asp-action="Cadastrar" asp-route-IdPainel="@ViewBag.IdPainel" asp-route-ano="@ano" class="btn btn-outline-primary float-right">
                                             <i class="fas fa-plus"></i> Cadastrar fatura
                                         </a>
                                     </li>
@@ -151,12 +152,10 @@
     <partial name="_ValidationScriptsPartial">
         <script>
             $("#DataFatura").change(() => {
-                const data = $("#DataFatura").val()
-                const mes = data.substr(5, 2)
-                const ano = data.substr(0, 4)
+                const ano = $("#DataFatura").val()               
 
                 var URL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                var UrlParms = URL + "?mes=" + mes + "&ano=" + ano;
+                var UrlParms = URL + "?ano=" + ano;
                 console.log(UrlParms)
                 window.location.href = UrlParms;
             })
@@ -172,8 +171,8 @@
                 //e.detail.originalEvent - original tr click event which triggered the rowclick.
                 const dataid = e.detail.originalEvent.target.getAttribute("data-id");
                 if (dataid != null && dataid != "") {
-                    console.log("@Url.Action("Editar")/" + dataid);
-                    location.href = "@Url.Action("Editar")/" + dataid;
+                    
+                    location.href = "@Url.Action("Editar")/" + dataid + '?ano=' + @ViewBag.Ano;
                 }
 
             });

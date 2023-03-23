@@ -1,53 +1,190 @@
 ﻿@model IGrid<PainelDadosRelModel>
 
-<tr>
-    <td class="bg-info" colspan="2"><b>Soma total</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.JanValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.FevValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.MarValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.AbrValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.MaiValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.JunValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.JulValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.AgoValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.SetValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.OutValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.NovValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info"><b>@(Model.Rows.Sum(row => row.Model.DezValor)!.Value.ToString("C2"))</b></td>
-    <td class="bg-info">
-        <b>
-            @(Model.Rows.Sum(row =>
-                row.Model.JanValor +
-                row.Model.FevValor +
-                row.Model.MarValor +
-                row.Model.AbrValor +
-                row.Model.MaiValor +
-                row.Model.JunValor +
-                row.Model.JulValor +
-                row.Model.AgoValor +
-                row.Model.SetValor +
-                row.Model.OutValor +
-                row.Model.NovValor +
-                row.Model.DezValor
-                )!.Value.ToString("C2"))
-        </b>
-    </td>
-    <td class="bg-info">
-        <b>
-            @(Model.Rows.Sum(row =>
-                row.Model.JanValorPago +
-                row.Model.FevValorPago +
-                row.Model.MarValorPago +
-                row.Model.AbrValorPago +
-                row.Model.MaiValorPago +
-                row.Model.JunValorPago +
-                row.Model.JulValorPago +
-                row.Model.AgoValorPago +
-                row.Model.SetValorPago +
-                row.Model.OutValorPago +
-                row.Model.NovValorPago +
-                row.Model.DezValorPago
-                )!.Value.ToString("C2"))
-        </b>
-    </td>
-</tr>
+<thead>
+    <tr>
+        <th class="bg-dark text-center" colspan="16">Relatorio</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td class="bg-danger" colspan="2"><b>Devido</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.JanTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.JanValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.FevTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.FevValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.MarTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.MarValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.AbrTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.AbrValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.MaiTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.MaiValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.JunTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.JunValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.JulTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.JulValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.AgoTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.AgoValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.SetTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.SetValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.OutTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.OutValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.NovTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.NovValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger"><b>@(Model.Rows.Where(x => x.Model.DezTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.DezValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-danger" colspan="2">
+            <b>
+                @(Model.Rows
+                    .Where(x =>
+                    x.Model.JanTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.FevTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.MarTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.AbrTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.MaiTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.JunTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.JulTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.AgoTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.SetTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.OutTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.NovTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.DezTipoSaldo == TipoSaldo.Debito
+                    )
+                    .Sum(row =>
+                    row.Model.JanValor +
+                    row.Model.FevValor +
+                    row.Model.MarValor +
+                    row.Model.AbrValor +
+                    row.Model.MaiValor +
+                    row.Model.JunValor +
+                    row.Model.JulValor +
+                    row.Model.AgoValor +
+                    row.Model.SetValor +
+                    row.Model.OutValor +
+                    row.Model.NovValor +
+                    row.Model.DezValor
+                    )!.Value.ToString("C2"))
+            </b>
+        </td>
+
+    </tr>
+    <tr>
+        <td class="bg-success" colspan="2"><b>Credito</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.JanTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.JanValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.FevTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.FevValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.MarTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.MarValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.AbrTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.AbrValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.MaiTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.MaiValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.JunTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.JunValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.JulTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.JulValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.AgoTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.AgoValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.SetTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.SetValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.OutTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.OutValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.NovTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.NovValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success"><b>@(Model.Rows.Where(x => x.Model.DezTipoSaldo == TipoSaldo.Credito).Sum(row => row.Model.DezValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-success" colspan="2">
+            <b>
+                @(Model.Rows
+                    .Where(x =>
+                    x.Model.JanTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.FevTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.MarTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.AbrTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.MaiTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.JunTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.JulTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.AgoTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.SetTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.OutTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.NovTipoSaldo == TipoSaldo.Credito ||
+                    x.Model.DezTipoSaldo == TipoSaldo.Credito
+                    )
+                    .Sum(row =>
+                    row.Model.JanValorPago +
+                    row.Model.FevValorPago +
+                    row.Model.MarValorPago +
+                    row.Model.AbrValorPago +
+                    row.Model.MaiValorPago +
+                    row.Model.JunValorPago +
+                    row.Model.JulValorPago +
+                    row.Model.AgoValorPago +
+                    row.Model.SetValorPago +
+                    row.Model.OutValorPago +
+                    row.Model.NovValorPago +
+                    row.Model.DezValorPago
+                    )!.Value.ToString("C2"))
+            </b>
+        </td>
+
+    </tr>
+    <tr>
+        <td class="bg-info" colspan="2"><b>Pago</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.JanTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.JanValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.FevTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.FevValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.MarTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.MarValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.AbrTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.AbrValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.MaiTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.MaiValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.JunTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.JunValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.JulTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.JulValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.AgoTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.AgoValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.SetTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.SetValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.OutTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.OutValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.NovTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.NovValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info"><b>@(Model.Rows.Where(x => x.Model.DezTipoSaldo == TipoSaldo.Debito).Sum(row => row.Model.DezValorPago)!.Value.ToString("C2"))</b></td>
+        <td class="bg-info" colspan="2">
+            <b>
+                @(Model.Rows
+                    .Where(x =>
+                    x.Model.JanTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.FevTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.MarTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.AbrTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.MaiTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.JunTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.JulTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.AgoTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.SetTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.OutTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.NovTipoSaldo == TipoSaldo.Debito &&
+                    x.Model.DezTipoSaldo == TipoSaldo.Debito
+                    )
+                    .Sum(row =>
+                    row.Model.JanValorPago +
+                    row.Model.FevValorPago +
+                    row.Model.MarValorPago +
+                    row.Model.AbrValorPago +
+                    row.Model.MaiValorPago +
+                    row.Model.JunValorPago +
+                    row.Model.JulValorPago +
+                    row.Model.AgoValorPago +
+                    row.Model.SetValorPago +
+                    row.Model.OutValorPago +
+                    row.Model.NovValorPago +
+                    row.Model.DezValorPago
+                    )!.Value.ToString("C2"))
+            </b>
+        </td>
+
+    </tr>
+    <tr>
+        <td class="bg-dark" colspan="2"><b>Saldo</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.JanValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.FevValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.MarValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.AbrValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.MaiValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.JunValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.JulValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.AgoValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.SetValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.OutValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.NovValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark"><b>@(Model.Rows.Sum(row => row.Model.DezValor)!.Value.ToString("C2"))</b></td>
+        <td class="bg-dark" colspan="2">
+            <b>
+                @(Model.Rows.Sum(row =>
+                    row.Model.JanValor +
+                    row.Model.FevValor +
+                    row.Model.MarValor +
+                    row.Model.AbrValor +
+                    row.Model.MaiValor +
+                    row.Model.JunValor +
+                    row.Model.JulValor +
+                    row.Model.AgoValor +
+                    row.Model.SetValor +
+                    row.Model.OutValor +
+                    row.Model.NovValor +
+                    row.Model.DezValor
+                    )!.Value.ToString("C2"))
+            </b>
+        </td>
+
+    </tr>
+</tbody>
