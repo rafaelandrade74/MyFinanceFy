@@ -26,7 +26,7 @@ namespace MyFinanceFy.Repository
                 return await Task.Run(() =>
                 {
                     Create(painel);
-                    return new QueryResult(QueryResultStatus.Sucesso, "Produto cadastrado com sucesso!");
+                    return new QueryResult(QueryResultStatus.Sucesso, "Painel cadastrado com sucesso!");
                 });
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace MyFinanceFy.Repository
                 return await Task.Run(() =>
                 {
                     Update(painel);
-                    return new QueryResult(QueryResultStatus.Sucesso, "Produto cadastrado com sucesso!");
+                    return new QueryResult(QueryResultStatus.Sucesso, "Painel atualizado com sucesso!");
                 });
             }
             catch (Exception ex)
@@ -59,7 +59,7 @@ namespace MyFinanceFy.Repository
                 return await Task.Run(() =>
                 {
                     Delete(painel);
-                    return new QueryResult(QueryResultStatus.Sucesso, "Produto cadastrado com sucesso!");
+                    return new QueryResult(QueryResultStatus.Sucesso, "Painel deletado com sucesso!");
                 });
             }
             catch (Exception ex)
@@ -87,10 +87,6 @@ namespace MyFinanceFy.Repository
             return await FindAllWithIncludesAsQueryble().ToListAsync();
         }
 
-        public async Task<IEnumerable<Painel>> FindByUserIdAsync(string Id)
-        {
-            return await FindByCondition(x => x.IdUsuario == Id).ToListAsync();
-        }
 
         public async Task<Painel?> FindByIdAsync(string Id)
         {

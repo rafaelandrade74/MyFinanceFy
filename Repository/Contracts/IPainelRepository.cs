@@ -8,7 +8,6 @@ namespace MyFinanceFy.Repository.Contracts
         IQueryable<Painel> FindAllWithIncludesAsQueryble();
         Task<IEnumerable<Painel>> FindAllAsync();
         Task<IEnumerable<Painel>> FindAllWithIncludesAsync();
-        Task<IEnumerable<Painel>> FindByUserIdAsync(string Id);
         Task<Painel?> FindByIdAsync(string Id);
         Task<QueryResult> CreateAsync(Painel painel);
         Task<QueryResult> UpdateAsync(Painel painel);

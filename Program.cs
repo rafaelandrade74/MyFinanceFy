@@ -26,6 +26,7 @@ builder.Services.AddIdentity<Usuario, IdentityRole>(options =>
   .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IPainelRepository, PainelRepository>();
+builder.Services.AddScoped<IPainelUsuarioRepository, PainelUsuarioRepository>();
 builder.Services.AddScoped<IPainelDadosRepository, PainelDadosRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 

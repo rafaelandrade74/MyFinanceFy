@@ -11,8 +11,8 @@ using MyFinanceFy.Data;
 namespace MyFinanceFy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230221023303_corrigindodtpaineldados")]
-    partial class corrigindodtpaineldados
+    [Migration("20230329220648_InicializacaoDb")]
+    partial class InicializacaoDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace MyFinanceFy.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -62,7 +62,7 @@ namespace MyFinanceFy.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -85,7 +85,7 @@ namespace MyFinanceFy.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -97,17 +97,17 @@ namespace MyFinanceFy.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -119,10 +119,10 @@ namespace MyFinanceFy.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -134,13 +134,13 @@ namespace MyFinanceFy.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext");
@@ -154,7 +154,7 @@ namespace MyFinanceFy.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Cor")
                         .IsRequired()
@@ -313,19 +313,13 @@ namespace MyFinanceFy.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(95)");
-
-                    b.Property<string>("IdUsuario")
-                        .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdUsuario");
 
                     b.ToTable("fin_paineis");
                 });
@@ -334,16 +328,16 @@ namespace MyFinanceFy.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateOnly>("DataFatura")
                         .HasColumnType("date");
 
                     b.Property<DateTime?>("DataPagamento")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
@@ -351,13 +345,12 @@ namespace MyFinanceFy.Migrations
 
                     b.Property<string>("IdCategoria")
                         .IsRequired()
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("IdPainel")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Nome")
-                        .IsRequired()
+                    b.Property<string>("Observacao")
                         .HasColumnType("longtext");
 
                     b.Property<int>("Parcelas")
@@ -373,7 +366,7 @@ namespace MyFinanceFy.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal>("ValorPago")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
@@ -384,10 +377,234 @@ namespace MyFinanceFy.Migrations
                     b.ToTable("fin_painel_dados");
                 });
 
+            modelBuilder.Entity("MyFinanceFy.Models.PainelDadosRelModel", b =>
+                {
+                    b.Property<string>("AbrId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("AbrStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AbrTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("AbrValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("AbrValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("AgoId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("AgoStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AgoTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("AgoValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("AgoValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("Ano")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Categoria")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DezId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("DezStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DezTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("DezValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("DezValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("FevId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("FevStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FevTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("FevValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("FevValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("IdPainel")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("JanId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("JanStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JanTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("JanValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("JanValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("JulId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("JulStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JulTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("JulValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("JulValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("JunId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("JunStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JunTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("JunValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("JunValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("MaiId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("MaiStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MaiTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("MaiValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("MaiValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("MarId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("MarStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MarTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("MarValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("MarValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("NovId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("NovStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NovTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("NovValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("NovValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("OutId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("OutStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OutTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("OutValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("OutValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("SetId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("SetStatusPagamento")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SetTipoSaldo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("SetValor")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("SetValorPago")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("view_fin_painel_dados_rel", (string)null);
+                });
+
+            modelBuilder.Entity("MyFinanceFy.Models.PainelUsuario", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("IdPainel")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("IdUsuario")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdPainel");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.ToTable("fin_painel_usuarios");
+                });
+
             modelBuilder.Entity("MyFinanceFy.Models.Usuario", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(95)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -411,7 +628,7 @@ namespace MyFinanceFy.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -503,17 +720,6 @@ namespace MyFinanceFy.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyFinanceFy.Models.Painel", b =>
-                {
-                    b.HasOne("MyFinanceFy.Models.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("IdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("MyFinanceFy.Models.PainelDados", b =>
                 {
                     b.HasOne("MyFinanceFy.Models.Categoria", "Categoria")
@@ -531,9 +737,30 @@ namespace MyFinanceFy.Migrations
                     b.Navigation("Painel");
                 });
 
+            modelBuilder.Entity("MyFinanceFy.Models.PainelUsuario", b =>
+                {
+                    b.HasOne("MyFinanceFy.Models.Painel", "Painel")
+                        .WithMany("Usuario")
+                        .HasForeignKey("IdPainel")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyFinanceFy.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Painel");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("MyFinanceFy.Models.Painel", b =>
                 {
                     b.Navigation("PainelDados");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("MyFinanceFy.Models.Usuario", b =>

@@ -26,7 +26,7 @@ namespace MyFinanceFy.Repository
                 return await Task.Run(() =>
                 {
                     Create(painelDados);
-                    return new QueryResult(QueryResultStatus.Sucesso, "Produto cadastrado com sucesso!");
+                    return new QueryResult(QueryResultStatus.Sucesso, "Fatura cadastrada com sucesso!");
                 });
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace MyFinanceFy.Repository
                 return await Task.Run(() =>
                 {
                     Update(painelDados);
-                    return new QueryResult(QueryResultStatus.Sucesso, "Produto cadastrado com sucesso!");
+                    return new QueryResult(QueryResultStatus.Sucesso, "Fatura atualizada com sucesso!");
                 });
             }
             catch (Exception ex)
@@ -59,7 +59,7 @@ namespace MyFinanceFy.Repository
                 return await Task.Run(() =>
                 {
                     Delete(painelDados);
-                    return new QueryResult(QueryResultStatus.Sucesso, "Produto cadastrado com sucesso!");
+                    return new QueryResult(QueryResultStatus.Sucesso, "Fatura removida com sucesso!");
                 });
             }
             catch (Exception ex)

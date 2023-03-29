@@ -34,7 +34,7 @@ SELECT
 a.*,
 CASE 
 	WHEN jan.Id IS NOT NULL THEN jan.Id 
-	ELSE ""
+	ELSE """"""
 END JanId,
 CASE 
 	WHEN jan.Valor IS NOT NULL THEN jan.Valor 
@@ -48,7 +48,7 @@ CASE WHEN jan.StatusPagamento IS NOT NULL THEN jan.StatusPagamento ELSE 0 END Ja
 CASE WHEN jan.TipoSaldo IS NOT NULL THEN jan.TipoSaldo ELSE 0 END JanTipoSaldo,
 CASE 
 	WHEN fev.Id IS NOT NULL THEN fev.Id 
-	ELSE ""
+	ELSE """"
 END FevId,
 CASE 
 	WHEN fev.Valor IS NOT NULL THEN fev.Valor 
@@ -62,7 +62,7 @@ CASE WHEN fev.StatusPagamento IS NOT NULL THEN fev.StatusPagamento ELSE 0 END Fe
 CASE WHEN fev.TipoSaldo IS NOT NULL THEN fev.TipoSaldo ELSE 0 END FevTipoSaldo,
 CASE 
 	WHEN mar.Id IS NOT NULL THEN mar.Id 
-	ELSE ""
+	ELSE """"
 END MarId,
 CASE 
 	WHEN mar.Valor IS NOT NULL THEN mar.Valor 
@@ -76,7 +76,7 @@ CASE WHEN mar.StatusPagamento IS NOT NULL THEN mar.StatusPagamento	ELSE 0 END Ma
 CASE WHEN mar.TipoSaldo IS NOT NULL THEN mar.TipoSaldo ELSE 0 END MarTipoSaldo,
 CASE 
 	WHEN abr.Id IS NOT NULL THEN abr.Id 
-	ELSE ""
+	ELSE """"
 END AbrId,
 CASE 
 	WHEN abr.Valor IS NOT NULL THEN abr.Valor 
@@ -93,7 +93,7 @@ END AbrStatusPagamento,
 CASE WHEN abr.TipoSaldo IS NOT NULL THEN abr.TipoSaldo ELSE 0 END AbrTipoSaldo,
 CASE 
 	WHEN mai.Id IS NOT NULL THEN mai.Id 
-	ELSE ""
+	ELSE """"
 END MaiId,
 CASE 
 	WHEN mai.Valor IS NOT NULL THEN mai.Valor 
@@ -110,7 +110,7 @@ END MaiStatusPagamento,
 CASE WHEN mai.TipoSaldo IS NOT NULL THEN mai.TipoSaldo ELSE 0 END MaiTipoSaldo,
 CASE 
 	WHEN jun.Id IS NOT NULL THEN jun.Id 
-	ELSE ""
+	ELSE """"
 END JunId,
 CASE 
 	WHEN jun.Valor IS NOT NULL THEN jun.Valor 
@@ -127,7 +127,7 @@ END JunStatusPagamento,
 CASE WHEN jun.TipoSaldo IS NOT NULL THEN jun.TipoSaldo ELSE 0 END JunTipoSaldo,
 CASE 
 	WHEN jul.Id IS NOT NULL THEN jul.Id 
-	ELSE ""
+	ELSE """"
 END JulId,
 CASE 
 	WHEN jul.Valor IS NOT NULL THEN jul.Valor 
@@ -144,7 +144,7 @@ END JulStatusPagamento,
 CASE WHEN jul.TipoSaldo IS NOT NULL THEN jul.TipoSaldo ELSE 0 END JulTipoSaldo,
 CASE 
 	WHEN ago.Id IS NOT NULL THEN ago.Id 
-	ELSE ""
+	ELSE """"
 END AgoId,
 CASE 
 	WHEN ago.Valor IS NOT NULL THEN ago.Valor 
@@ -161,7 +161,7 @@ END AgoStatusPagamento,
 CASE WHEN ago.TipoSaldo IS NOT NULL THEN ago.TipoSaldo ELSE 0 END AgoTipoSaldo,
 CASE 
 	WHEN setem.Id IS NOT NULL THEN setem.Id 
-	ELSE ""
+	ELSE """"
 END SetId,
 CASE 
 	WHEN setem.Valor IS NOT NULL THEN setem.Valor 
@@ -178,7 +178,7 @@ END SetStatusPagamento,
 CASE WHEN setem.TipoSaldo IS NOT NULL THEN setem.TipoSaldo ELSE 0 END SetTipoSaldo,
 CASE 
 	WHEN outu.Id IS NOT NULL THEN outu.Id 
-	ELSE ""
+	ELSE """"
 END OutId,
 CASE 
 	WHEN outu.Valor IS NOT NULL THEN outu.Valor 
@@ -195,7 +195,7 @@ END OutStatusPagamento,
 CASE WHEN outu.TipoSaldo IS NOT NULL THEN outu.TipoSaldo ELSE 0 END OutTipoSaldo,
 CASE 
 	WHEN nov.Id IS NOT NULL THEN nov.Id 
-	ELSE ""
+	ELSE """"
 END NovId,
 CASE 
 	WHEN nov.Valor IS NOT NULL THEN nov.Valor 
@@ -212,7 +212,7 @@ END NovStatusPagamento,
 CASE WHEN nov.TipoSaldo IS NOT NULL THEN nov.TipoSaldo ELSE 0 END NovTipoSaldo,
 CASE 
 	WHEN dez.Id IS NOT NULL THEN dez.Id 
-	ELSE ""
+	ELSE """"
 END DezId,
 CASE 
 	WHEN dez.Valor IS NOT NULL THEN dez.Valor 
@@ -312,16 +312,14 @@ LEFT JOIN view_fin_painel_dados dez
 		AND dez.Descricao = a.Descricao 
 		AND dez.TipoSaldo = a.TipoSaldo
 		AND dez.Mes = 12");
-			
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-			migrationBuilder.Sql("DROP VIEW view_fin_painel_dados");
+            migrationBuilder.Sql("DROP VIEW view_fin_painel_dados");
             migrationBuilder.Sql("DROP VIEW view_fin_painel_dados_cat");
             migrationBuilder.Sql("DROP VIEW view_fin_painel_dados_rel");
-            
         }
     }
 }

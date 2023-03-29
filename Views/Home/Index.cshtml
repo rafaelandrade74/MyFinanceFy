@@ -31,9 +31,19 @@
                     <div class="card-body">
                         Este site é destinado a pessoas que querem organizar sua vida financeira!
                     </div>
-                    <div class="card-footer">
-                        <a asp-action="Login" asp-area="Auth" asp-controller="Account"> @Constantes.MyFinancefy </a>
+                    @if (User?.Identity?.IsAuthenticated ?? false)
+                    {
+                        <div class="card-footer">
+                        <a asp-action="Index" asp-controller="Painel"> @Constantes.MyFinancefy - Painel </a>
                     </div>
+                    }
+                    else
+                    {
+                        <div class="card-footer">
+                            <a asp-action="Login" asp-area="Auth" asp-controller="Account"> @Constantes.MyFinancefy - Login </a>
+                        </div>
+                    }
+                    
                 </div>
             </div>
         </div>

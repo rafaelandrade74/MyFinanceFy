@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyFinanceFy.Migrations
 {
     /// <inheritdoc />
-    public partial class IniciarDB : Migration
+    public partial class InicializacaoDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,7 @@ namespace MyFinanceFy.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(95)", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -40,7 +40,7 @@ namespace MyFinanceFy.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(95)", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FullName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -63,7 +63,7 @@ namespace MyFinanceFy.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime", nullable: true),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
@@ -77,7 +77,7 @@ namespace MyFinanceFy.Migrations
                 name: "fin_categorias",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(95)", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Nome = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -91,12 +91,27 @@ namespace MyFinanceFy.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "fin_paineis",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nome = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_fin_paineis", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(type: "varchar(95)", nullable: false)
+                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClaimType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -121,7 +136,7 @@ namespace MyFinanceFy.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(type: "varchar(95)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClaimType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -144,13 +159,13 @@ namespace MyFinanceFy.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(95)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProviderKey = table.Column<string>(type: "varchar(95)", nullable: false)
+                    ProviderKey = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(95)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -169,9 +184,9 @@ namespace MyFinanceFy.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(95)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RoleId = table.Column<string>(type: "varchar(95)", nullable: false)
+                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -196,11 +211,11 @@ namespace MyFinanceFy.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(95)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LoginProvider = table.Column<string>(type: "varchar(95)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(95)", nullable: false)
+                    Name = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Value = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -218,49 +233,26 @@ namespace MyFinanceFy.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "fin_paineis",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Nome = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdUsuario = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_fin_paineis", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_fin_paineis_AspNetUsers_IdUsuario",
-                        column: x => x.IdUsuario,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "fin_painel_dados",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(95)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Nome = table.Column<string>(type: "longtext", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Descricao = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Observacao = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Valor = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     Parcelas = table.Column<int>(type: "int", nullable: false),
                     TipoSaldo = table.Column<int>(type: "int", nullable: false),
-                    IdCategoria = table.Column<string>(type: "varchar(95)", nullable: false)
+                    IdCategoria = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataPagamento = table.Column<DateTime>(type: "datetime", nullable: false),
+                    DataPagamento = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     StatusPagamento = table.Column<int>(type: "int", nullable: false),
-                    ValorPago = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    ValorPago = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     DataFatura = table.Column<DateOnly>(type: "date", nullable: false),
-                    DataCadastro = table.Column<DateTime>(type: "datetime", nullable: false),
-                    IdPainel = table.Column<string>(type: "varchar(95)", nullable: true)
+                    DataCadastro = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IdPainel = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -277,6 +269,35 @@ namespace MyFinanceFy.Migrations
                         column: x => x.IdPainel,
                         principalTable: "fin_paineis",
                         principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "fin_painel_usuarios",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdUsuario = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdPainel = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_fin_painel_usuarios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_fin_painel_usuarios_AspNetUsers_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_fin_painel_usuarios_fin_paineis_IdPainel",
+                        column: x => x.IdPainel,
+                        principalTable: "fin_paineis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -348,11 +369,6 @@ namespace MyFinanceFy.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_fin_paineis_IdUsuario",
-                table: "fin_paineis",
-                column: "IdUsuario");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_fin_painel_dados_IdCategoria",
                 table: "fin_painel_dados",
                 column: "IdCategoria");
@@ -361,6 +377,16 @@ namespace MyFinanceFy.Migrations
                 name: "IX_fin_painel_dados_IdPainel",
                 table: "fin_painel_dados",
                 column: "IdPainel");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_fin_painel_usuarios_IdPainel",
+                table: "fin_painel_usuarios",
+                column: "IdPainel");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_fin_painel_usuarios_IdUsuario",
+                table: "fin_painel_usuarios",
+                column: "IdUsuario");
         }
 
         /// <inheritdoc />
@@ -385,16 +411,19 @@ namespace MyFinanceFy.Migrations
                 name: "fin_painel_dados");
 
             migrationBuilder.DropTable(
+                name: "fin_painel_usuarios");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "fin_categorias");
 
             migrationBuilder.DropTable(
-                name: "fin_paineis");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "fin_paineis");
         }
     }
 }

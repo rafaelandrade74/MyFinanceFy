@@ -12,7 +12,8 @@ namespace MyFinanceFy.Data
             : base(options)
         {
         }
-        public DbSet<Painel>? Painels { get; set; }
+        public DbSet<Painel>? Paineis { get; set; }
+        public DbSet<PainelUsuario>? PainelUsuarios { get; set; }
         public DbSet<PainelDados>? PainelDados { get; set; }
         public DbSet<Categoria>? Categorias { get; set; }
         public DbSet<PainelDadosRelModel>? PainelDadosView { get; set; }
