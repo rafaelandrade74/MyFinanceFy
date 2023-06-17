@@ -19,7 +19,10 @@ CASE
 	WHEN fpd.TipoSaldo = 1 THEN fpd.Valor
 	ELSE fpd.Valor * -1
 END Valor,
-fpd.ValorPago,
+CASE 
+	WHEN fpd.TipoSaldo = 1 THEN fpd.ValorPago
+	ELSE fpd.ValorPago * -1
+END ValorPago,
 fpd.TipoSaldo,
 fpd.StatusPagamento,
 EXTRACT(YEAR FROM fpd.DataFatura) AS Ano,
