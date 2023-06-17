@@ -5,5 +5,7 @@ Meu app de finanças pessoal
 # install
 
 dotnet ef database update
-
-dotnet publish
+## Linux
+dotnet publish --os linux
+## windows
+dotnet publish 
