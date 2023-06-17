@@ -92,5 +92,10 @@ namespace MyFinanceFy.Repository
         {
             return await FindByCondition(x=> x.Id == Id).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> UsuarioTemAcesso(string idPainel, string idUsuario)
+        {
+            return await dbContext.PainelUsuarios!.AnyAsync(x=> x.IdPainel == idPainel && x.IdUsuario == idUsuario);
+        }
     }
 }

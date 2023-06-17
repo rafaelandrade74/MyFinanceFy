@@ -16,7 +16,8 @@
                         <div class="card-tools">
                             <ul class="nav nav-pills ml-auto">
                                 <li class="nav-item">
-                                    <a asp-action="Index" asp-route-Id="@Model.IdPainel" asp-route-ano="@ViewBag.Ano" class="btn btn-outline-primary float-right">
+                                    <a asp-action="Index" asp-route-Id="@Model.IdPainel" asp-route-ano="@ViewBag.Ano"
+                                        class="btn btn-outline-primary float-right">
                                         <i class="fas fa-arrow-circle-left"></i> Voltar
                                     </a>
                                 </li>
@@ -40,7 +41,8 @@
                                 </div>
                                 <div class="form-group col-6">
                                     <label asp-for="DataCadastro" class="form-label"></label>
-                                    <input name="DataCadastro" class="form-control" value="@Model.DataCadastro" readonly />
+                                    <input name="DataCadastro" class="form-control" value="@Model.DataCadastro"
+                                        readonly />
                                     <span asp-validation-for="DataCadastro" class="text-danger"></span>
                                 </div>
                             </div>
@@ -56,7 +58,7 @@
                                     <span asp-validation-for="Observacao" class="text-danger"></span>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
 
                                 <div class="form-group col-3">
@@ -90,13 +92,15 @@
 
                                 <div class="form-group col-3">
                                     <label asp-for="TipoSaldo" class="form-label"></label>
-                                    <select asp-for="TipoSaldo" class="form-control" asp-items="@Html.GetEnumSelectList<TipoSaldo>()">
+                                    <select asp-for="TipoSaldo" class="form-control"
+                                        asp-items="@Html.GetEnumSelectList<TipoSaldo>()">
                                     </select>
                                     <span asp-validation-for="TipoSaldo" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-3">
                                     <label asp-for="StatusPagamento" class="form-label"></label>
-                                    <select asp-for="StatusPagamento" class="form-control" asp-items="@Html.GetEnumSelectList<StatusPagamento>()">
+                                    <select asp-for="StatusPagamento" class="form-control"
+                                        asp-items="@Html.GetEnumSelectList<StatusPagamento>()">
                                     </select>
                                     <span asp-validation-for="StatusPagamento" class="text-danger"></span>
                                 </div>
@@ -113,7 +117,10 @@
                         </div>
                         <div class="card-footer clearfix">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Atualizar</button>
-                            <button type="button" onclick="removerItemAjax('@Model.Id')" class="btn btn-danger"><i class="fa fa-trash"></i> Excluir</button>
+                            <button type="button" onclick="removerItemAjax('@Model.Id')" class="btn btn-danger"><i
+                                    class="fa fa-trash"></i> Excluir</button>
+                            <button type="button" onclick="duplicar()" class="btn btn-outline-secondary float-right"><i
+                                    class="fa fa-pencil"></i> Duplicar Fatura</a>
                         </div>
                     </form>
                 </div>
@@ -130,5 +137,21 @@
         <script>
             $('#Valor').mask("000.000.000.000.000,00", { reverse: true });
             $('#ValorPago').mask("000.000.000.000.000,00", { reverse: true });
+            function duplicar() {
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: "Sera duplicado a fatura para o proximo mês!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sim, Duplicar!',
+                    cancelButtonText: 'Não, cancelar!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@(TempData["UrlDuplicar"])';
+                    }
+                });
+            }
         </script>
     }

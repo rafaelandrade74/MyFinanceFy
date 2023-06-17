@@ -23,6 +23,7 @@ namespace MyFinanceFy.Models
         public int Parcelas { get; set; }
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
         public TipoSaldo TipoSaldo { get; set; }
+        [Display(Name = "Categoria")]
         public string IdCategoria { get; set; } = null!;
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
         public DateTime? DataPagamento { get; set; }

@@ -4,6 +4,8 @@
     List<decimal> valCreditoMeses = new List<decimal>();
     List<decimal> valPagoMeses = new List<decimal>();
     List<decimal> valSaldoMeses = new List<decimal>();
+    
+
     valDevidoMeses.Add(Model.Rows.Where(x => x.Model.JanTipoSaldo == TipoSaldo.Debito && x.Model.JanStatusPagamento != StatusPagamento.Pago).Sum(row => row.Model.JanValor)!.Value);
     valDevidoMeses.Add(Model.Rows.Where(x => x.Model.FevTipoSaldo == TipoSaldo.Debito && x.Model.FevStatusPagamento != StatusPagamento.Pago).Sum(row => row.Model.FevValor)!.Value);
     valDevidoMeses.Add(Model.Rows.Where(x => x.Model.MarTipoSaldo == TipoSaldo.Debito && x.Model.MarStatusPagamento != StatusPagamento.Pago).Sum(row => row.Model.MarValor)!.Value);

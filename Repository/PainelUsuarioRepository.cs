@@ -63,6 +63,16 @@ namespace MyFinanceFy.Repository
                 return new QueryResult(QueryResultStatus.Erro, "Ocorreu algum erro, entre em contato com o Admin!");
             }
         }
+        public async Task<QueryResult> DeleteByIdPainelAsync(string idPainel)
+        {
+            var lista = await FindByCondition(x=> x.IdPainel == idPainel).ToListAsync();
+            foreach (var painel in lista)
+            {
+                await DeleteAsync(painel);                
+            }
+
+            return new QueryResult(QueryResultStatus.Sucesso, "Painel removido com sucesso!");
+        }
 
         public async Task<IEnumerable<PainelUsuario>> FindAllAsync()
         {

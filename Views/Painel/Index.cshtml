@@ -1,4 +1,4 @@
-@model IEnumerable<Painel>
+@model IEnumerable<PainelVisualizacao>
 @{
     ViewData["Title"] = "Paineis";
 }
@@ -38,20 +38,24 @@
                         </div>
                     </div>
                     <div class="card-group">
-                        @foreach (Painel painel in Model)
+                        @foreach (PainelVisualizacao painel in Model)
                         {
                             <div class="card">
                                 <img src="~/img/fin.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <h5 class="card-title">@painel.Nome</h5>
+                                    <h5 class="card-title">@painel.Painel.Nome</h5>
                                     <p class="card-text"></p>
 
                                 </div>
+
                                 <div class="card-footer">
-                                    <a asp-action="Index" asp-controller="PainelDados" asp-route-id="@painel.Id"
+                                    <a asp-action="Index" asp-controller="PainelDados" asp-route-id="@painel.Painel.Id"
                                         class="btn btn-outline-primary">Ver</a>
-                                    <a href="#" onclick="removerItemAjax('@painel.Id')"
-                                        class="btn btn-outline-danger">Remover</a>
+                                    @if (painel.Dono)
+                                    {
+                                        <a href="#" onclick="removerItemAjax('@painel.Painel.Id')"
+                                            class="btn btn-outline-danger">Remover</a>
+                                    }
                                 </div>
                             </div>
                         }
@@ -71,5 +75,5 @@
 
 
 @section Scripts{
- <partial name="_ValidationScriptsPartial">
-}
+    <partial name="_ValidationScriptsPartial">
+    }    

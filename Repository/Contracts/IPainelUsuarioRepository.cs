@@ -14,5 +14,6 @@ namespace MyFinanceFy.Repository.Contracts
         Task<QueryResult> CreateAsync(PainelUsuario painelUsuario);
         Task<QueryResult> UpdateAsync(PainelUsuario painelUsuario);
         Task<QueryResult> DeleteAsync(PainelUsuario painelUsuario);
+        Task<QueryResult> DeleteByIdPainelAsync(string idPainel);
     }
 }

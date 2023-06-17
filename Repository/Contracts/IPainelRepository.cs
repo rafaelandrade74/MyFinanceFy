@@ -12,5 +12,12 @@ namespace MyFinanceFy.Repository.Contracts
         Task<QueryResult> CreateAsync(Painel painel);
         Task<QueryResult> UpdateAsync(Painel painel);
         Task<QueryResult> DeleteAsync(Painel painel);
+        /// <summary>
+        /// Verifica se o usuario tem acesso ao painel
+        /// </summary>
+        /// <param name="idPainel"></param>
+        /// <param name="idUsuario"></param>
+        /// <returns></returns>
+        Task<bool> UsuarioTemAcesso(string idPainel, string idUsuario);
     }
 }

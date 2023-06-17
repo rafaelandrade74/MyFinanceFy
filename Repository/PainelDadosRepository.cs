@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MyFinanceFy.Data;
 using MyFinanceFy.Libs.Ajuda;
@@ -68,6 +64,12 @@ namespace MyFinanceFy.Repository
                 return new QueryResult(QueryResultStatus.Erro, "Ocorreu algum erro, entre em contato com o Admin!");
             }
         }
+        public async Task<QueryResult> DeleteByIdPainelAsync(string idPainel)
+        {
+            var listaPaineisDados = await FindByCondition(x=> x.IdPainel == idPainel).ToListAsync();
+            foreach(var painelDados in listaPaineisDados) await DeleteAsync(painelDados);
+            return new QueryResult(QueryResultStatus.Sucesso, "Faturas removidas com sucesso!");
+        }
 
         public async Task<IEnumerable<PainelDados>> FindAllAsync()
         {
@@ -90,5 +92,17 @@ namespace MyFinanceFy.Repository
         {
             return await FindByCondition(x => x.Id == Id).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> UsuarioTemAcesso(string idPainelDados, string idUsuario)
+        {
+            PainelDados? painelDados = await FindByCondition(x => x.Id == idPainelDados).FirstOrDefaultAsync();
+            if (painelDados != null)
+            {
+                return await dbContext.PainelUsuarios!.AnyAsync(x => x.IdPainel == painelDados.IdPainel && x.IdUsuario == idUsuario);
+            }
+            return false;
+        }
+
+
     }
 }
