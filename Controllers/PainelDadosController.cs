@@ -8,6 +8,7 @@ using MyFinanceFy.Libs.Enums;
 using MyFinanceFy.Libs.Ext;
 using MyFinanceFy.Models;
 using MyFinanceFy.Repository.Contracts;
+using System.Xml.Linq;
 
 namespace MyFinanceFy.Controllers
 {
@@ -170,6 +171,12 @@ namespace MyFinanceFy.Controllers
                 _logger.LogError(ex, string.Empty);
                 TempData["MSG_E"] = "Ocorreu um erro ao atualizar";
                 return View(painelDados);
+            }
+            finally
+            {
+                int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
+                ViewBag.Ano = ano;
+                ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
             }
 
             return View(painelDados);
