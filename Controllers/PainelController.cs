@@ -28,7 +28,8 @@ namespace MyFinanceFy.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<PainelVisualizacao?> paineis = (await _painelUsuarioRepository.FindByUsuarioIdAsync(User.Id() ?? "")).Select(x => new PainelVisualizacao { Painel = x!.Painel!, Dono = x.Dono });
+            IEnumerable<PainelVisualizacao?> paineis = (await _painelUsuarioRepository.FindByUsuarioIdAsync(User.Id() ?? ""))
+                .Select(x => new PainelVisualizacao { Painel = x!.Painel!, Dono = x.Dono });
             TempData["UrlRemover"] = Url.Action(nameof(Remover));
             return View(paineis);
         }

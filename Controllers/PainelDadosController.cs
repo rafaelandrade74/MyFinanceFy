@@ -83,6 +83,19 @@ namespace MyFinanceFy.Controllers
                 {
                     int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
                     if (painelDados.StatusPagamento == StatusPagamento.Pago) painelDados.DataPagamento = DateTime.Now;
+                    PainelDados? painelDadosProx = await _painelDadosRepository
+                                .FindAllWithIncludesAsQueryble()
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(x =>
+                                    x.DataFatura == painelDados.DataFatura
+                                && x.IdPainel == painelDados.IdPainel
+                                && x.Descricao == painelDados.Descricao
+                                && x.IdCategoria == painelDados.IdCategoria);
+                    if (painelDadosProx != null)
+                    {
+                        TempData["MSG_E"] = "Já existe!";
+                        return View(painelDados);
+                    }
                     for (int i = 1; i <= painelDados.Parcelas;)
                     {
                         var retorno = await _painelDadosRepository.CreateAsync(painelDados);
@@ -117,7 +130,7 @@ namespace MyFinanceFy.Controllers
             if (!(await _painelDadosRepository.UsuarioTemAcesso(Id, User.Id()))) return RedirectToAction("Index", "Painel");
             ViewBag.Ano = anoDt;
             ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
-            var painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble()
+            PainelDados? painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble()
                 .FirstOrDefaultAsync(x => x.Id == Id);
             TempData["UrlRemover"] = Url.Action(nameof(Remover));
             TempData["UrlRemoverRedirect"] = Url.Action(nameof(Index), new { Id = painelDados!.IdPainel });
@@ -132,10 +145,24 @@ namespace MyFinanceFy.Controllers
                 if (ModelState.IsValid)
                 {
                     if (!(await _painelDadosRepository.UsuarioTemAcesso(painelDados.Id!, User.Id()))) return RedirectToAction("Index", "Painel");
-                    var retorno = await _painelDadosRepository.UpdateAsync(painelDados);
+                    PainelDados? painelDadosProx = await _painelDadosRepository
+                                .FindAllWithIncludesAsQueryble()
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(x =>
+                                    x.DataFatura == painelDados.DataFatura
+                                && x.IdPainel == painelDados.IdPainel
+                                && x.Descricao == painelDados.Descricao
+                                && x.IdCategoria == painelDados.IdCategoria 
+                                && x.Id != painelDados.Id);
+                    if (painelDadosProx != null)
+                    {
+                        TempData["MSG_E"] = "Já existe!";
+                        return View(painelDados);
+                    }
+                    QueryResult? retorno = await _painelDadosRepository.UpdateAsync(painelDados);
                     if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
                     else TempData["MSG_E"] = retorno.Mensagem;
-                    return RedirectToAction(nameof(Index), routeValues: new { Id = painelDados.IdPainel, ano });
+                    return View(painelDados);
                 }
             }
             catch (Exception ex)
@@ -150,15 +177,31 @@ namespace MyFinanceFy.Controllers
         public async Task<IActionResult> Duplicar(string Id, string? ano = null)
         {
             int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
-            if (!(await _painelDadosRepository.UsuarioTemAcesso(Id, User.Id()))) return RedirectToAction("Index", "Painel");
+            if (!await _painelDadosRepository.UsuarioTemAcesso(Id, User.Id())) return RedirectToAction("Index", "Painel");
             ViewBag.Ano = anoDt;
-            ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
-            var painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble()
+            ViewBag.Categorias = (await _categoriaRepository.FindAllAsync())
+                .Select(x => new SelectListItem(x.Nome, x.Id))
+                .OrderBy(x => x.Text);
+            PainelDados? painelDados = await _painelDadosRepository
+                .FindAllWithIncludesAsQueryble()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == Id);
-            if (painelDados == null) return RedirectToAction("Index", "Painel");
 
-            PainelDados painelDadosNovo = new ()
+            if (painelDados == null) return RedirectToAction("Index", "Painel");
+            DateOnly dtProximoMes = painelDados.DataFatura.AddMonths(1);
+            PainelDados? painelDadosProx = await _painelDadosRepository
+                .FindAllWithIncludesAsQueryble()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x =>
+                    x.DataFatura == dtProximoMes
+                && x.IdPainel == painelDados.IdPainel
+                && x.Descricao == painelDados.Descricao
+                && x.IdCategoria == painelDados.IdCategoria);
+
+            //se ja existir redireciona para o proximo existente.
+            if (painelDadosProx != null) return RedirectToAction(nameof(Editar), new { Id = painelDadosProx?.Id ?? Id });
+
+            PainelDados painelDadosNovo = new()
             {
                 IdCategoria = painelDados.IdCategoria,
                 IdPainel = painelDados.IdPainel,
@@ -171,8 +214,8 @@ namespace MyFinanceFy.Controllers
                 DataFatura = painelDados.DataFatura.AddMonths(1),
                 StatusPagamento = StatusPagamento.Pendente
             };
-                
-            var retorno = await _painelDadosRepository.CreateAsync(painelDadosNovo);
+
+            QueryResult? retorno = await _painelDadosRepository.CreateAsync(painelDadosNovo);
             if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
             else TempData["MSG_E"] = retorno.Mensagem;
             TempData["UrlRemover"] = Url.Action(nameof(Remover));
