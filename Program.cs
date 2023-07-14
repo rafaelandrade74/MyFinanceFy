@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using MyFinanceFy.Data;
+using MyFinanceFy.Libs.Ext;
 using MyFinanceFy.Libs.Servicos;
 using MyFinanceFy.Models;
 using MyFinanceFy.Repository;
@@ -10,6 +11,7 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddSerilog();
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

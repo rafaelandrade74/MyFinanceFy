@@ -13,12 +13,12 @@ namespace MyFinanceFy.Controllers
 {
     public class PainelController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<PainelController> _logger;
         private readonly IPainelRepository _painelRepository;
         private readonly IPainelUsuarioRepository _painelUsuarioRepository;
         private readonly IPainelDadosRepository _painelDadosRepository;
 
-        public PainelController(ILogger<HomeController> logger, IPainelRepository painelRepository, IPainelDadosRepository painelDadosRepository, IPainelUsuarioRepository painelUsuarioRepository)
+        public PainelController(ILogger<PainelController> logger, IPainelRepository painelRepository, IPainelDadosRepository painelDadosRepository, IPainelUsuarioRepository painelUsuarioRepository)
         {
             _logger = logger;
             _painelRepository = painelRepository;
@@ -29,7 +29,7 @@ namespace MyFinanceFy.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<PainelVisualizacao?> paineis = (await _painelUsuarioRepository.FindByUsuarioIdAsync(User.Id() ?? ""))
-                .Select(x => new PainelVisualizacao { Painel = x!.Painel!, Dono = x.Dono });
+                .Select(x => new PainelVisualizacao { Painel = x!.Painel!, Permissao = x.Permissao });
             TempData["UrlRemover"] = Url.Action(nameof(Remover));
             return View(paineis);
         }
@@ -48,7 +48,7 @@ namespace MyFinanceFy.Controllers
                     var retorno = await _painelRepository.CreateAsync(painel);
                     if (retorno.Status == QueryResultStatus.Sucesso)
                     {
-                        await _painelUsuarioRepository.CreateAsync(new PainelUsuario { IdPainel = painel.Id, IdUsuario = User.Id(), Dono = true });
+                        await _painelUsuarioRepository.CreateAsync(new PainelUsuario { IdPainel = painel.Id, IdUsuario = User.Id(), Permissao = PainelPermissao.Dono });
                         TempData["MSG_S"] = "Cadastrado com sucesso!";
                     }
                     else TempData["MSG_E"] = "Ocorreu um erro ao cadastrar";
@@ -57,7 +57,7 @@ namespace MyFinanceFy.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, string.Empty);
+                _logger.LogError(ex, "Ocorreu um erro!");
                 TempData["MSG_E"] = "Ocorreu um erro ao cadastrar";
                 return View(painel);
             }

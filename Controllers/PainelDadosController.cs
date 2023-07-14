@@ -8,19 +8,18 @@ using MyFinanceFy.Libs.Enums;
 using MyFinanceFy.Libs.Ext;
 using MyFinanceFy.Models;
 using MyFinanceFy.Repository.Contracts;
-using System.Xml.Linq;
 
 namespace MyFinanceFy.Controllers
 {
     public class PainelDadosController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<PainelDadosController> _logger;
         private readonly IPainelDadosRepository _painelDadosRepository;
         private readonly IPainelRepository _painelRepository;
         private readonly ICategoriaRepository _categoriaRepository;
         private readonly ApplicationDbContext _applicationDb;
 
-        public PainelDadosController(ILogger<HomeController> logger, IPainelDadosRepository painelDadosRepository, ICategoriaRepository categoriaRepository, ApplicationDbContext applicationDb, IPainelRepository painelRepository)
+        public PainelDadosController(ILogger<PainelDadosController> logger, IPainelDadosRepository painelDadosRepository, ICategoriaRepository categoriaRepository, ApplicationDbContext applicationDb, IPainelRepository painelRepository)
         {
             _logger = logger;
             _painelDadosRepository = painelDadosRepository;
@@ -28,7 +27,23 @@ namespace MyFinanceFy.Controllers
             _applicationDb = applicationDb;
             _painelRepository = painelRepository;
         }
-
+        /// <summary>
+        /// Carrega Viewbags e TempDatas para a pagina de formulario
+        /// </summary>
+        /// <param name="ano"></param>
+        /// <param name="painelDados"></param>
+        /// <returns></returns>
+        private async Task CarregarItensForm(int ano, PainelDados? painelDados)
+        {
+            ViewBag.Ano = ano;
+            ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
+            TempData["UrlRemover"] = Url.Action(nameof(Remover));
+            if (painelDados != null)
+            {
+                TempData["UrlRemoverRedirect"] = Url.Action(nameof(Index), new { Id = painelDados!.IdPainel });
+                TempData["UrlDuplicar"] = Url.Action(nameof(Duplicar), new { painelDados.Id, ano });
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> Index(string Id, string? ano = null)
         {
@@ -71,8 +86,7 @@ namespace MyFinanceFy.Controllers
         public async Task<IActionResult> Cadastrar(string IdPainel, string? ano = null)
         {
             int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
-            ViewBag.Ano = anoDt;
-            ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
+            await CarregarItensForm(anoDt, null);
             return View(new PainelDados() { IdPainel = IdPainel });
         }
         [HttpPost, ValidateAntiForgeryToken]
@@ -114,13 +128,14 @@ namespace MyFinanceFy.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, string.Empty);
+                _logger.LogError(ex, "Erro ao cadastrar!");
                 TempData["MSG_E"] = "Ocorreu um erro ao cadastrar";
                 return View(painelDados);
             }
             finally
             {
-                ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
+                int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
+                await CarregarItensForm(anoDt, null);
             }
 
             return View(painelDados);
@@ -128,107 +143,120 @@ namespace MyFinanceFy.Controllers
         public async Task<IActionResult> Editar(string Id, string? ano = null)
         {
             int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
-            if (!(await _painelDadosRepository.UsuarioTemAcesso(Id, User.Id()))) return RedirectToAction("Index", "Painel");
-            ViewBag.Ano = anoDt;
-            ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
-            PainelDados? painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble()
-                .FirstOrDefaultAsync(x => x.Id == Id);
-            TempData["UrlRemover"] = Url.Action(nameof(Remover));
-            TempData["UrlRemoverRedirect"] = Url.Action(nameof(Index), new { Id = painelDados!.IdPainel });
-            TempData["UrlDuplicar"] = Url.Action(nameof(Duplicar), new { Id, ano });
-            return View(painelDados);
+            try
+            {
+                if (!(await _painelDadosRepository.UsuarioTemAcesso(Id, User.Id()))) return RedirectToAction("Index", "Painel");
+
+                PainelDados? painelDados = await _painelDadosRepository.FindAllWithIncludesAsQueryble()
+                    .FirstOrDefaultAsync(x => x.Id == Id);
+
+                await CarregarItensForm(anoDt, painelDados);
+
+                return View(painelDados);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro!");
+                TempData["MSG_E"] = "Ocorreu um erro ao carregar!";
+                return RedirectToAction(nameof(Editar), new { Id });
+            }
         }
+
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar([FromForm] PainelDados painelDados, string? ano = null)
         {
             try
             {
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid) return RedirectToAction(nameof(Editar), new { painelDados.Id });
+
+                if (!(await _painelDadosRepository.UsuarioTemAcesso(painelDados.Id!, User.Id()))) return RedirectToAction("Index", "Painel");
+                int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
+                await CarregarItensForm(anoDt, painelDados);
+                PainelDados? painelDadosProx = await _painelDadosRepository
+                            .FindAllWithIncludesAsQueryble()
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(x =>
+                                x.DataFatura == painelDados.DataFatura
+                            && x.IdPainel == painelDados.IdPainel
+                            && x.Descricao == painelDados.Descricao
+                            && x.IdCategoria == painelDados.IdCategoria
+                            && x.Id != painelDados.Id);
+                if (painelDadosProx != null)
                 {
-                    if (!(await _painelDadosRepository.UsuarioTemAcesso(painelDados.Id!, User.Id()))) return RedirectToAction("Index", "Painel");
-                    PainelDados? painelDadosProx = await _painelDadosRepository
-                                .FindAllWithIncludesAsQueryble()
-                                .AsNoTracking()
-                                .FirstOrDefaultAsync(x =>
-                                    x.DataFatura == painelDados.DataFatura
-                                && x.IdPainel == painelDados.IdPainel
-                                && x.Descricao == painelDados.Descricao
-                                && x.IdCategoria == painelDados.IdCategoria 
-                                && x.Id != painelDados.Id);
-                    if (painelDadosProx != null)
-                    {
-                        TempData["MSG_E"] = "Já existe!";
-                        return View(painelDados);
-                    }
-                    QueryResult? retorno = await _painelDadosRepository.UpdateAsync(painelDados);
-                    if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
-                    else TempData["MSG_E"] = retorno.Mensagem;
+                    TempData["MSG_E"] = "Já existe!";
                     return View(painelDados);
                 }
+                QueryResult? retorno = await _painelDadosRepository.UpdateAsync(painelDados);
+                if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
+                else TempData["MSG_E"] = retorno.Mensagem;
+                return View(painelDados);
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, string.Empty);
+                _logger.LogError(ex, "Erro ao atualizar");
                 TempData["MSG_E"] = "Ocorreu um erro ao atualizar";
-                return View(painelDados);
+                return RedirectToAction(nameof(Editar), new { painelDados.Id });
             }
-            finally
-            {
-                int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
-                ViewBag.Ano = ano;
-                ViewBag.Categorias = (await _categoriaRepository.FindAllAsync()).Select(x => new SelectListItem(x.Nome, x.Id)).OrderBy(x => x.Text);
-            }
-
-            return View(painelDados);
         }
+
         public async Task<IActionResult> Duplicar(string Id, string? ano = null)
         {
             int anoDt = ano == null ? DateTime.Now.Year : int.Parse(ano);
-            if (!await _painelDadosRepository.UsuarioTemAcesso(Id, User.Id())) return RedirectToAction("Index", "Painel");
-            ViewBag.Ano = anoDt;
-            ViewBag.Categorias = (await _categoriaRepository.FindAllAsync())
-                .Select(x => new SelectListItem(x.Nome, x.Id))
-                .OrderBy(x => x.Text);
-            PainelDados? painelDados = await _painelDadosRepository
-                .FindAllWithIncludesAsQueryble()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == Id);
-
-            if (painelDados == null) return RedirectToAction("Index", "Painel");
-            DateOnly dtProximoMes = painelDados.DataFatura.AddMonths(1);
-            PainelDados? painelDadosProx = await _painelDadosRepository
-                .FindAllWithIncludesAsQueryble()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x =>
-                    x.DataFatura == dtProximoMes
-                && x.IdPainel == painelDados.IdPainel
-                && x.Descricao == painelDados.Descricao
-                && x.IdCategoria == painelDados.IdCategoria);
-
-            //se ja existir redireciona para o proximo existente.
-            if (painelDadosProx != null) return RedirectToAction(nameof(Editar), new { Id = painelDadosProx?.Id ?? Id });
-
-            PainelDados painelDadosNovo = new()
+            try
             {
-                IdCategoria = painelDados.IdCategoria,
-                IdPainel = painelDados.IdPainel,
-                Descricao = painelDados.Descricao,
-                Observacao = painelDados.Observacao,
-                Valor = painelDados.Valor,
-                ValorPago = 0,
-                Parcelas = painelDados.Parcelas == 1 ? painelDados.Parcelas : --painelDados.Parcelas,
-                TipoSaldo = painelDados.TipoSaldo,
-                DataFatura = painelDados.DataFatura.AddMonths(1),
-                StatusPagamento = StatusPagamento.Pendente
-            };
+                if (!await _painelDadosRepository.UsuarioTemAcesso(Id, User.Id())) return RedirectToAction("Index", "Painel");
+                ViewBag.Ano = anoDt;
+                ViewBag.Categorias = (await _categoriaRepository.FindAllAsync())
+                    .Select(x => new SelectListItem(x.Nome, x.Id))
+                    .OrderBy(x => x.Text);
+                PainelDados? painelDados = await _painelDadosRepository
+                    .FindAllWithIncludesAsQueryble()
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == Id);
 
-            QueryResult? retorno = await _painelDadosRepository.CreateAsync(painelDadosNovo);
-            if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
-            else TempData["MSG_E"] = retorno.Mensagem;
-            TempData["UrlRemover"] = Url.Action(nameof(Remover));
-            TempData["UrlRemoverRedirect"] = Url.Action(nameof(Index), new { Id = painelDadosNovo!.IdPainel });
+                if (painelDados == null) return RedirectToAction("Index", "Painel");
+                DateOnly dtProximoMes = painelDados.DataFatura.AddMonths(1);
+                PainelDados? painelDadosProx = await _painelDadosRepository
+                    .FindAllWithIncludesAsQueryble()
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x =>
+                        x.DataFatura == dtProximoMes
+                    && x.IdPainel == painelDados.IdPainel
+                    && x.Descricao == painelDados.Descricao
+                    && x.IdCategoria == painelDados.IdCategoria);
 
-            return RedirectToAction(nameof(Editar), new { Id = painelDadosNovo?.Id ?? Id });
+                //se ja existir redireciona para o proximo existente.
+                if (painelDadosProx != null) return RedirectToAction(nameof(Editar), new { Id = painelDadosProx?.Id ?? Id });
+
+                PainelDados painelDadosNovo = new()
+                {
+                    IdCategoria = painelDados.IdCategoria,
+                    IdPainel = painelDados.IdPainel,
+                    Descricao = painelDados.Descricao,
+                    Observacao = painelDados.Observacao,
+                    Valor = painelDados.Valor,
+                    ValorPago = 0,
+                    Parcelas = painelDados.Parcelas == 1 ? painelDados.Parcelas : --painelDados.Parcelas,
+                    TipoSaldo = painelDados.TipoSaldo,
+                    DataFatura = painelDados.DataFatura.AddMonths(1),
+                    StatusPagamento = StatusPagamento.Pendente
+                };
+
+                QueryResult? retorno = await _painelDadosRepository.CreateAsync(painelDadosNovo);
+                if (retorno.Status == QueryResultStatus.Sucesso) TempData["MSG_S"] = retorno.Mensagem;
+                else TempData["MSG_E"] = retorno.Mensagem;
+
+                await CarregarItensForm(anoDt, painelDados);
+
+                return RedirectToAction(nameof(Editar), new { Id = painelDadosNovo?.Id ?? Id });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ocorreu um erro!");
+                TempData["MSG_E"] = "Ocorreu um erro ao duplicar";
+                return RedirectToAction(nameof(Editar), new { Id });
+            }
         }
         [HttpDelete, ValidateAntiForgeryToken]
         public async Task<IActionResult> Remover(string Id)

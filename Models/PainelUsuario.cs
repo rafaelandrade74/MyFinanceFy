@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MyFinanceFy.Libs.Enums;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyFinanceFy.Models
@@ -9,7 +11,8 @@ namespace MyFinanceFy.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string? Id { get; set; }
-        public bool Dono { get; set; }
+        [DefaultValue(PainelPermissao.Dono)]
+        public PainelPermissao Permissao { get; set; }
         public string IdUsuario { get; set; } = null!;
         public string IdPainel { get; set; } = null!;
         [ForeignKey(nameof(IdUsuario))]

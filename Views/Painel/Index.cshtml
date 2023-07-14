@@ -8,7 +8,6 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -31,41 +30,52 @@
                         <div class="card-tools">
                             <ul class="nav nav-pills ml-auto">
                                 <li class="nav-item">
-                                    <a asp-action="Cadastrar" class="btn btn-outline-primary float-right"><i
-                                            class="fas fa-plus"></i> Novo painel</a>
+                                    <a asp-action="Cadastrar" class="btn btn-outline-primary float-right">
+                                        <i class="fas fa-plus"></i> Novo painel
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="card-group">
-                        @foreach (PainelVisualizacao painel in Model)
-                        {
-                            <div class="card">
-                                <img src="~/img/fin.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">@painel.Painel.Nome</h5>
-                                    <p class="card-text"></p>
-
-                                </div>
-
-                                <div class="card-footer">
-                                    <a asp-action="Index" asp-controller="PainelDados" asp-route-id="@painel.Painel.Id"
-                                        class="btn btn-outline-primary">Ver</a>
-                                    @if (painel.Dono)
+                    <div class="card-body">
+                        <div class="mvc-grid-table">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="dt-center" scope="col">Nome Painel</th>
+                                        <th class="dt-center" scope="col">#Visualizar</th>
+                                        <th class="dt-center" scope="col">#Membros</th>
+                                        <th class="dt-center" scope="col">#Remover</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (PainelVisualizacao painel in Model)
                                     {
-                                        <a href="#" onclick="removerItemAjax('@painel.Painel.Id')"
-                                            class="btn btn-outline-danger">Remover</a>
-                                    }
-                                </div>
-                            </div>
-                        }
-                        @if (Model.Count() == 0)
-                        {
-                            <div class="card-body">
-                                <p>Nenhum painel cadastrado.</p>
-                            </div>
+                                        <tr>
+                                            <td width="50%">@painel.Painel.Nome</td>
+                                            <td class="dt-center" width="15%">
+                                                <a asp-action="Index" asp-controller="PainelDados" asp-route-id="@painel.Painel.Id"
+                                               class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                                            </td>
+                                            <td class="dt-center" width="15%">
+                                                <a href="#" class="btn btn-outline-info"><i class="fas fa-users"></i></a>
+                                            </td>
 
-                        }
+                                            <td class="dt-center" width="15%">
+                                                <a href="#" @(painel.Permissao == PainelPermissao.Dono ? $"onclick=removerItemAjax('{painel.Painel.Id}')" : "")
+                                               class="btn btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (Model.Count() == 0)
+                                    {
+                                        <tr>
+                                            <td colspan="4"><p>Nenhum painel cadastrado.</p></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,4 +86,4 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial">
-    }    
+    }

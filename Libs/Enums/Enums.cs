@@ -1,5 +1,12 @@
 ﻿namespace MyFinanceFy.Libs.Enums
 {
+    public enum PainelPermissao
+    {
+        Dono,
+        Adminitrador,
+        Membro,
+        Visualizador
+    }
     public enum QueryResultStatus
     {
         Sucesso,
