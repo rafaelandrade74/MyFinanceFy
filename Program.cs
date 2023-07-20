@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +14,15 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddSerilog();
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "temp-keys");
+
+builder.Services.AddDataProtection()
+           .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+           .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddScoped<EmailSender>();
@@ -39,6 +48,9 @@ builder.Services.AddControllersWithViews();
 
 
 var app = builder.Build();
+
+
+
 
 var supportedCultures = new[] { new CultureInfo("pt-BR") };
 app.UseRequestLocalization(new RequestLocalizationOptions
